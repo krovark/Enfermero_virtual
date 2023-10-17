@@ -1,12 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Platform, Button, SafeAreaView, Text, View } from 'react-native';
+import SideBar from './src/Vistas/SideBar'
+
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Hola mundo</Text>
-      <StatusBar style="auto" />
-    </View>
+
+    <SideBar></SideBar>
+    // <View style={styles.container}>
+    
+    //    {/* <HomeMenu></HomeMenu> */}
+    
+    //    <StatusBar style="auto" />
+    //  </View>
   );
 }
 
