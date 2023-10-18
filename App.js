@@ -6,22 +6,25 @@ import SideBar from './src/Vistas/SideBar'
 export default function App() {
   return (
 
-    <SideBar></SideBar>
-    // <View style={styles.container}>
     
-    //    {/* <HomeMenu></HomeMenu> */}
-    
-    //    <StatusBar style="auto" />
-    //  </View>
+
+    <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+      <SideBar />
+      <StatusBar style="auto" />
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#8AA1B1',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'white',
+    paddingTop: Platform.OS === 'android' ? 30 : 3,
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
 });
+
 

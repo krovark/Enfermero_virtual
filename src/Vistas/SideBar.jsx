@@ -15,7 +15,7 @@ const CustomDrawerContent = (props) => {
 
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    
     <PaperDrawer.Section style={styles.drawer}>
       <Searchbar
         placeholder="Buscar..."
@@ -54,7 +54,7 @@ const CustomDrawerContent = (props) => {
         onPress={() => props.navigation.navigate('Chat')}
       />
       <View style={styles.logoutContainer}>
-        <PaperDrawer.Item
+        <IconButton
           icon="logout"
           label="Cerrar Sesión"
           size={20}
@@ -64,7 +64,7 @@ const CustomDrawerContent = (props) => {
         />
       </View>
     </PaperDrawer.Section>
-     </SafeAreaView>
+     
   );
 };
 
