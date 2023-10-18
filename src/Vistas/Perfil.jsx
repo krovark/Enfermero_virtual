@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const Tratamientos = () => {
+const Perfil = () => {
     return (
       <View style={styles.container}>
         <Text>Hola Hola hola hola mundo</Text>
@@ -17,4 +17,4 @@ const Tratamientos = () => {
     },
   });
   
-  export default Tratamientos;
+  export default Perfil;

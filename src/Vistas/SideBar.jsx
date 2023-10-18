@@ -5,8 +5,10 @@ import { View, StyleSheet, SafeAreaView} from 'react-native';
 import { Drawer as PaperDrawer, Searchbar, IconButton } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../Vistas/Home';
-
-
+import Perfil from '../Vistas/Perfil'
+import Tratamientos from '../Vistas/RTratamiento'
+import Alarmas from '../Vistas/Alarmas'
+import Chat from '../Vistas/Chat'
 
 const Drawer = createDrawerNavigator();
 
@@ -31,17 +33,17 @@ const CustomDrawerContent = (props) => {
       <PaperDrawer.Item
         icon="plus"
         label="Tratamientos"
-        onPress={() => props.navigation.navigate('Inventory')}
+        onPress={() => props.navigation.navigate('Tratamientos')}
       />
       <PaperDrawer.Item
         icon="account"
         label="Perfil"
-        onPress={() => props.navigation.navigate('Profile')}
+        onPress={() => props.navigation.navigate('Perfil')}
       />
       <PaperDrawer.Item
         icon="alarm"
         label="Alarmas"
-        onPress={() => props.navigation.navigate('Alarms')}
+        onPress={() => props.navigation.navigate('Alarmas')}
       />
       <PaperDrawer.Item
         icon="history"
@@ -73,7 +75,10 @@ const DrawerNavigator = () => {
     <NavigationContainer>
     <Drawer.Navigator initialRouteName="Inicio" drawerContent={props => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Inicio" component={HomeScreen}  />
-      {/* <Drawer.Screen name="Profile"  /> */}
+      <Drawer.Screen name="Perfil" component={Perfil}  />
+      <Drawer.Screen name="Chat" component={Chat}  />
+      <Drawer.Screen name="Tratamientos" component={Tratamientos}  />
+      <Drawer.Screen name="Alarmas" component={Alarmas}  />
     </Drawer.Navigator>
     </NavigationContainer>
   );
