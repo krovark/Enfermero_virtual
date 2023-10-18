@@ -54,15 +54,14 @@ const CustomDrawerContent = (props) => {
         onPress={() => props.navigation.navigate('Chat')}
       />
       <View style={styles.logoutContainer}>
-        <IconButton
-          icon="logout"
-          label="Cerrar Sesión"
-          size={20}
-          onPress={() => {
-            // Lógica para cerrar sesión
-          }}
-        />
-      </View>
+    <PaperDrawer.Item
+      icon="logout"
+      label="Cerrar Sesión"
+      onPress={() => {
+        // Lógica para cerrar sesión
+      }}
+    />
+    </View>
     </PaperDrawer.Section>
      
   );
