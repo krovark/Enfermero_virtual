@@ -33,7 +33,7 @@ const Perfil = () => {
 >
         <ScrollView style={styles.container}>
             <View style={styles.header}>
-                <IconButton icon="pencil" size={24} onPress={toggleEditable} />
+                <IconButton icon="pencil" size={20} onPress={toggleEditable} />
                 </View>
             <View style={styles.avatarSection}>
                 <Avatar.Image size={130} source={ProfileImg} />
