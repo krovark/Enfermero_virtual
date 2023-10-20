@@ -1,18 +1,21 @@
-import React , { useState } from 'react';
-import { View, Text, StyleSheet, Image, Modal, ScrollView, KeyboardAvoidingView, Platform  } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, Image, Modal, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard   } from 'react-native';
 import { IconButton, Avatar, TextInput, Button, HelperText  } from 'react-native-paper';
 import ProfileImg from '../../assets/Avatar.png'
+import PhoneInput from 'react-native-phone-input';
 
 
 
 const Perfil = () => {
-    const [name, setName] = useState("Itunuoluwa Abidoye, 45");
+    const [name, setName] = useState("Itunuoluwa Abidoye");
+    const [edad, setEdad] = useState("45");
     const [location, setLocation] = useState("Formosa, Argentina");
-    const [phone, setPhone] = useState("");
+    const [phone, setPhone] = useState("0123456789");
     const [bloodType, setBloodType] = useState("");
     const [peso, setPeso] = useState('');
     const [altura, setAltura] = useState('');
     const [emergencyContact, setEmergencyContact] = useState("");
+
 
   
     const [isEditable, setIsEditable] = useState(false); // Nuevo estado
@@ -24,53 +27,77 @@ const Perfil = () => {
     const getTextInputStyle = (isEditable) => {
         return isEditable ? styles.input : styles.inputDisabled;
     };
+    const phoneRef = useRef(null);
+    const phoneNumber = phoneRef.current ? phoneRef.current.getValue() : "";
+
+   
+    const handleUpdate = () => {
+        
+        setIsEditable(false);
+    };
+
+
 
     return (
 
         <KeyboardAvoidingView
-    behavior={Platform.OS === "ios" ? 0 : 0}
+    behavior={Platform.OS === "ios" ? "padding" : null}
     style={{flex: 1}}
 >
-        <ScrollView style={styles.container}>
+    <ScrollView style={styles.container}>
+        <View style={styles.cardContainer}>
             <View style={styles.header}>
-                <IconButton icon="pencil" size={20} onPress={toggleEditable} />
+                {/* <IconButton icon="pencil" size={20} onPress={toggleEditable} /> */}
+                {!isEditable && <IconButton icon="pencil" size={20} onPress={toggleEditable} />}
                 </View>
             <View style={styles.avatarSection}>
                 <Avatar.Image size={130} source={ProfileImg} />
                 
-                
-                <TextInput
+                 
+                {/* <TextInput
                     label="Nombre y Edad"
                     editable = {false}
                     value={name}
                     onChangeText={setName}
                     style={styles.name}
-                />
+                /> */}
+                <Text style={styles.nombre_edad}>
+                    {name},{edad}
+                
+                </Text>
             </View>
             
-            <TextInput
-                label="Ubicación"
-                value={location}
-                onChangeText={setLocation}
-                style={styles.input}
-                editable={isEditable}
-            />
             
-            <TextInput
-                label="Número de teléfono"
+
+            {/* <PhoneInput
+                ref={phoneRef}               
+                initialCountry=' ' // Por defecto Argentina, puedes cambiarlo
                 value={phone}
-                onChangeText={setPhone}
-                // style={styles.input}
-                // editable={isEditable}
-                style={isEditable ? styles.input : styles.inputDisabled} // Estilo condicional aquí
-            />
+                onChangePhoneNumber={setPhone}
+                disable={!isEditable}
+                // textStyle={isEditable ? styles.phoneInputText : styles.phoneInputTextDisabled} // Asegúrate de estilizarlo correctamente
+                // style={styles.phoneInputContainer}
+                style={isEditable ? styles.phoneInputContainer : styles.phoneInputDisabled}
+            /> */}
+
+            <TouchableWithoutFeedback onPress={(e) => e.preventDefault()}>
+                <View pointerEvents={isEditable ? 'auto' : 'none'}>
+                    <PhoneInput
+                        ref={phoneRef}               
+                        initialCountry='ar' // Por defecto Argentina, puedes cambiarlo
+                        value={phone}
+                        onChangePhoneNumber={setPhone}
+                        style={isEditable ? styles.phoneInputContainer : styles.phoneInputDisabled}
+                    />
+                </View>
+            </TouchableWithoutFeedback>
 
             <TextInput
                 label="Tipo de sangre"
                 value={bloodType}
                 onChangeText={setBloodType}
                 // style={styles.input}
-                // editable={isEditable}
+                editable={isEditable}
                 style={isEditable ? styles.input : styles.inputDisabled} // Estilo condicional aquí
             />
 
@@ -81,7 +108,7 @@ const Perfil = () => {
                 // style={styles.input}
                 keyboardType="numeric"
                 placeholder='kgs'
-                // editable={isEditable}
+                editable={isEditable}
                 style={isEditable ? styles.input : styles.inputDisabled} // Estilo condicional aquí
             />
                
@@ -93,10 +120,8 @@ const Perfil = () => {
                 style={isEditable ? styles.input : styles.inputDisabled} // Estilo condicional aquí
                 keyboardType="numeric"
                 placeholder='centímetros'
-                // editable={isEditable}
+                editable={isEditable}
             />
-
-           
 
 
             <TextInput
@@ -105,30 +130,41 @@ const Perfil = () => {
                 onChangeText={setEmergencyContact}
                 // style={styles.input}
                 style={isEditable ? styles.input : styles.inputDisabled} // Estilo condicional aquí
-                // editable={isEditable}
+                editable={isEditable}
             />
-
-            {/* <Button mode="contained" onPress={() => { }}>
-                Update Profile
-            </Button> */}
 
             {
         isEditable && (
-        <Button mode="contained" onPress={() => { /* Acción para actualizar el perfil */ }}>
+        <Button mode="contained" onPress={handleUpdate}>
             Actualizar Perfil
         </Button>
                 )
             }
+              </View>
+              <View style={{ height: 70 }} />
         </ScrollView>
+        
         </KeyboardAvoidingView>
     );
 };
   
 const styles = StyleSheet.create({
+    
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#f5f5f5'
+        backgroundColor:  '#dcdcdc'
+    },
+    cardContainer: { // Estilo del contenedor de tarjeta
+        padding: 20,
+        borderRadius: 10,
+        backgroundColor: '#f5f5f5',  // Color de fondo blanco para la tarjeta
+        elevation: 5,  // Da la sensación de elevación
+        margin: 10,
+        shadowOffset: { width: 1, height: 1 },
+        shadowColor: '#333',
+        shadowOpacity: 0.3,
+        shadowRadius: 2
     },
     avatarSection: {
         alignItems: 'center',
@@ -146,6 +182,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
 
     },
+    nombre_edad:{
+
+        fontSize: 20,
+        color: 'black',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        margin: 10
+
+
+    },
     input: {
         marginBottom: 15,
         backgroundColor: 'white', // para que el fondo del TextInput sea blanco
@@ -154,9 +200,28 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
     },
 
+    phoneInputContainer: {
+        marginBottom: 15,
+        backgroundColor: 'white',  // Color de fondo blanco para el TextInput
+        borderRadius: 5,          // bordes redondeados para el TextInput
+        elevation: 2,             // sombra para darle un poco de elevación al TextInput
+        paddingHorizontal: 12,
+        height: 56,               // height similar to TextInput's default
+    },
+
+    phoneInputDisabled: {
+    
+        marginBottom: 15,
+        backgroundColor: '#f2e8e1',  // Color de fondo blanco para el TextInput
+        borderRadius: 5,          // bordes redondeados para el TextInput
+        elevation: 2,             // sombra para darle un poco de elevación al TextInput
+        paddingHorizontal: 12,
+        height: 56,
+
+    },
     inputDisabled: {
     marginBottom: 15,
-    backgroundColor: '#E0E0E0', // Color gris claro para el fondo
+    backgroundColor: '#f2e8e1', // Color gris claro para el fondo
     borderRadius: 5,
     elevation: 2,
     paddingHorizontal: 12,
