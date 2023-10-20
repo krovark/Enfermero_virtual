@@ -1,13 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 
 const HomeScreen = () => {
-
+  const [selected, setSelected] = useState('');
 
   return (
-    <View style={styles.container}>
-      <Text>Hola Hola hola hola mundo</Text>
-    </View>
+    <Calendar
+      onDayPress={day => {
+        setSelected(day.dateString);
+      }}
+      markedDates={{
+        [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'violet'}
+      }}
+    />
   );
   };
   
