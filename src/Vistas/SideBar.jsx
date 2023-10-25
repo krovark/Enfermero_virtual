@@ -9,6 +9,9 @@ import Perfil from '../Vistas/Perfil'
 import Tratamientos from '../Vistas/RTratamiento'
 import Alarmas from '../Vistas/Alarmas'
 import Chat from '../Vistas/Chat'
+import Inicio from '../Vistas/LoginRegister/Inicio'
+import Login from '../Vistas/LoginRegister/Login'
+import Register from '../Vistas/LoginRegister/Register';
 
 const Drawer = createDrawerNavigator();
 
@@ -26,9 +29,24 @@ const CustomDrawerContent = (props) => {
         style={styles.searchbar}
       />
       <PaperDrawer.Item
+        icon="login"
+        label="Inicio"
+        onPress={() => props.navigation.navigate('Inicio')}
+      />
+      <PaperDrawer.Item
+        icon="login-variant"
+        label="Login"
+        onPress={() => props.navigation.navigate('Login')}
+      />
+      <PaperDrawer.Item
+        icon="square-edit-outline"
+        label="Register"
+        onPress={() => props.navigation.navigate('Register')}
+      />
+      <PaperDrawer.Item
         icon="home"
         label="Home"
-        onPress={() => props.navigation.navigate('Inicio')}
+        onPress={() => props.navigation.navigate('HomeScreen')}
       />
       <PaperDrawer.Item
         icon="plus"
@@ -73,8 +91,11 @@ const CustomDrawerContent = (props) => {
 const DrawerNavigator = () => {
   return (
     <NavigationContainer>
-    <Drawer.Navigator initialRouteName="Inicio" drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Inicio" component={HomeScreen}  />
+    <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => <CustomDrawerContent {...props} />}>
+      <Drawer.Screen name="Inicio" component={Inicio}  />
+      <Drawer.Screen name="Login" component={Login}  />
+      <Drawer.Screen name="Register" component={Register}  />
+      <Drawer.Screen name="HomeScreen" component={HomeScreen}  />
       <Drawer.Screen name="Perfil" component={Perfil}  />
       <Drawer.Screen name="Chat" component={Chat}  />
       <Drawer.Screen name="Tratamientos" component={Tratamientos}  />
