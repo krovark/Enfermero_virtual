@@ -5,6 +5,9 @@ import SideBar from './src/Vistas/SideBar'
 
 export default function App() {
   return (
+
+    
+
     <View style={styles.container}>
       <SafeAreaView style={styles.container}>
       <SideBar />
@@ -23,3 +26,5 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
 });
+
+
