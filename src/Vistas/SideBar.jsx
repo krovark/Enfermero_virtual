@@ -11,6 +11,7 @@ import Alarmas from '../Vistas/Alarmas'
 import Chat from '../Vistas/Chat'
 import Inicio from '../Vistas/LoginRegister/Inicio.jsx';
 import Login from '../Vistas/LoginRegister/Login.jsx';
+import Register from '../Vistas/LoginRegister/Register.jsx';
 
 const Drawer = createDrawerNavigator();
 
@@ -26,16 +27,6 @@ const CustomDrawerContent = (props) => {
         value={searchQuery}
         onChangeText={setSearchQuery}
         style={styles.searchbar}
-      />
-      <PaperDrawer.Item
-        icon="login"
-        label="Inicio"
-        onPress={() => props.navigation.navigate('Inicio')}
-      />
-      <PaperDrawer.Item
-        icon="login-variant"
-        label="Login"
-        onPress={() => props.navigation.navigate('Login')}
       />
       <PaperDrawer.Item
         icon="home"
@@ -88,6 +79,7 @@ const DrawerNavigator = () => {
     <Drawer.Navigator initialRouteName="Inicio" drawerContent={props => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Inicio" component={Inicio}  />
       <Drawer.Screen name="Login" component={Login}  />
+      <Drawer.Screen name="Register" component={Register}  />
       <Drawer.Screen name="Home" component={HomeScreen}  />
       <Drawer.Screen name="Perfil" component={Perfil}  />
       <Drawer.Screen name="Chat" component={Chat}  />

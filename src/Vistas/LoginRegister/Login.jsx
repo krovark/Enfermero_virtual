@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ImageBackground } from 'react-native';
 import { Button, TextInput as TextInputPaper } from 'react-native-paper';
 
 const Login = () => {
@@ -12,29 +12,31 @@ const Login = () => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ fontSize: 24 }}>Iniciar Sesión</Text>
-      <View style={{ width: '80%' }}>
-        <TextInputPaper
-          label="Email"
-          value={email}
-          onChangeText={setEmail}
-          style={styles.input}
-          mode="outlined"
-        />
-        <TextInputPaper
-          label="Contraseña"
-          value={password}
-          onChangeText={setPassword}
-          style={styles.input}
-          mode="outlined"
-          secureTextEntry
-        />
-        <Button mode="contained" onPress={handleSubmit} style={styles.button}>
-          Iniciar Sesión
-        </Button>
+    <ImageBackground source={{ uri: "https://img.freepik.com/foto-gratis/hermosa-joven-doctora-mirando-camara-oficina_1301-7807.jpg" }} style={{ flex: 1, width: '100%', height: '100%' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.4)' }}>
+        <Text style={{ fontSize: 24, color: 'white' }}>Iniciar Sesión</Text>
+        <View style={{ width: '80%' }}>
+          <TextInputPaper
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            style={styles.input}
+            mode="outlined"
+          />
+          <TextInputPaper
+            label="Contraseña"
+            value={password}
+            onChangeText={setPassword}
+            style={styles.input}
+            mode="outlined"
+            secureTextEntry
+          />
+          <Button mode="contained" onPress={handleSubmit} style={styles.button}>
+            Iniciar Sesión
+          </Button>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ImageBackground, StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
 
-const Inicio = () => {
+const Inicio = ({ navigation }) => {
   const paperStyle = {
     padding: 20,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -40,16 +40,12 @@ const Inicio = () => {
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         <View style={paperStyle}>
           <View style={{ textAlign: 'right' }}>
-            <Text style={titleStyle}>AMV</Text>
+            <Text style={titleStyle}>SaludApp</Text>
             <Text style={subtitleStyle}>Asistente médico virtual</Text>
           </View>
           <View style={buttonContainerStyle}>
-            <Button mode="outlined" style={buttonStyle} buttonColor="#ffffff">
-              Registrarse
-            </Button>
-            <Button mode="contained" style={ingresarButtonStyle}>
-              Ingresar
-            </Button>
+          <Button mode="outlined" style={buttonStyle} buttonColor="#ffffff" onPress={() => navigation.navigate('Register')}>Registrarse</Button>
+          <Button mode="contained" style={ingresarButtonStyle} onPress={() => navigation.navigate('Login')}>Ingresar</Button>
           </View>
         </View>
       </View>
