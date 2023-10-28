@@ -101,7 +101,7 @@ const Register = ({ navigation }) => {
               <Button mode="contained" onPress={() => setStep(3)} style={styles.button}>
                 Siguiente
               </Button>
-              <Button mode="contained" onPress={() => setStep(1)} style={styles.button} buttonColor="#D3D3D3">
+              <Button mode="contained" onPress={() => setStep(1)} style={styles.button} buttonColor="#B3B3B3">
                 Atrás
               </Button>
             </>
@@ -127,7 +127,7 @@ const Register = ({ navigation }) => {
               <Button mode="contained" onPress={handleSubmit} style={styles.button}>
                 Registrarse
               </Button>
-              <Button mode="contained" onPress={() => setStep(2)} style={styles.button} buttonColor="#D3D3D3">
+              <Button mode="contained" onPress={() => setStep(2)} style={styles.button} buttonColor="#B3B3B3">
                 Atrás
               </Button>
             </>
