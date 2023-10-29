@@ -18,7 +18,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <view>
+    <View>
       <Calendar
 
         style={{
@@ -45,11 +45,11 @@ const HomeScreen = () => {
           [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'violet'}
         }}
       />
-      <view style={buttonContainerStyle}>
-        <button mode="contained" style={buttonStyle} buttonColor='red'>SOS</button>
+      <View style={buttonContainerStyle}>
+        <Button mode="contained" style={buttonStyle} buttonColor='red'>SOS</Button>
 
-      </view>
-    </view>
+      </View>
+    </View>
   );
   };
   

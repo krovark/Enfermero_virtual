@@ -12,6 +12,7 @@ import Chat from '../Vistas/Chat'
 import Inicio from '../Vistas/LoginRegister/Inicio.jsx';
 import Login from '../Vistas/LoginRegister/Login.jsx';
 import Register from '../Vistas/LoginRegister/Register.jsx';
+import Historial from '../Vistas/Historial.jsx';
 
 const Drawer = createDrawerNavigator();
 
@@ -51,7 +52,7 @@ const CustomDrawerContent = (props) => {
       <PaperDrawer.Item
         icon="history"
         label="Historial"
-        onPress={() => props.navigation.navigate('History')}
+        onPress={() => props.navigation.navigate('Historial')}
       />
       
       <PaperDrawer.Item
@@ -82,6 +83,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Register" component={Register}  />
       <Drawer.Screen name="Home" component={HomeScreen}  />
       <Drawer.Screen name="Perfil" component={Perfil}  />
+      <Drawer.Screen name="Historial" component={Historial}  />
       <Drawer.Screen name="Chat" component={Chat}  />
       <Drawer.Screen name="Tratamientos" component={Tratamientos}  />
       <Drawer.Screen name="Alarmas" component={Alarmas}  />
