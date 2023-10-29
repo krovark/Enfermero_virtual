@@ -6,7 +6,7 @@ import { Drawer as PaperDrawer, Searchbar, IconButton } from 'react-native-paper
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../Vistas/Home';
 import Perfil from '../Vistas/Perfil'
-import Tratamientos from '../Vistas/RTratamiento'
+import Tratamientos from '../Vistas/RegistrarTratamientos/RTratamiento'
 import Alarmas from '../Vistas/Alarmas'
 import Chat from '../Vistas/Chat'
 import Inicio from '../Vistas/LoginRegister/Inicio.jsx';

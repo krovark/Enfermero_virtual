@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button  } from 'react-native';
 
+
+
 const Tratamientos = () => {
   const [notas, setNotas] = useState(''); // State to hold the input text
   const [horario, setHorario] = useState('');
