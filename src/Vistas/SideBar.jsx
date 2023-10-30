@@ -7,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../Vistas/Home';
 import Perfil from '../Vistas/Perfil'
 import Tratamientos from '../Vistas/RTratamiento'
-import Alarmas from '../Vistas/Alarmas'
+import Historial from '../Vistas/Historial'
 import Chat from '../Vistas/Chat'
 import Inicio from '../Vistas/LoginRegister/Inicio.jsx';
 import Login from '../Vistas/LoginRegister/Login.jsx';
@@ -44,14 +44,9 @@ const CustomDrawerContent = (props) => {
         onPress={() => props.navigation.navigate('Perfil')}
       />
       <PaperDrawer.Item
-        icon="alarm"
-        label="Alarmas"
-        onPress={() => props.navigation.navigate('Alarmas')}
-      />
-      <PaperDrawer.Item
         icon="history"
         label="Historial"
-        onPress={() => props.navigation.navigate('History')}
+        onPress={() => props.navigation.navigate('Historial')}
       />
       
       <PaperDrawer.Item
@@ -84,7 +79,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Perfil" component={Perfil}  />
       <Drawer.Screen name="Chat" component={Chat}  />
       <Drawer.Screen name="Tratamientos" component={Tratamientos}  />
-      <Drawer.Screen name="Alarmas" component={Alarmas}  />
+      <Drawer.Screen name="Historial" component={Historial}  />
     </Drawer.Navigator>
     </NavigationContainer>
   );

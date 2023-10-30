@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, FlatList, Pressable } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-const Alarmas = (props) => {
+const Historial = (props) => {
   const item = [{
     id: 0,
     time: '17:30',
@@ -12,6 +13,7 @@ const Alarmas = (props) => {
     alarmNotifData: {
       id: 'efdfoiuad120983102',
     },
+    status: true,
     isEnabled: true,
   }, {
     id: 1,
@@ -22,6 +24,7 @@ const Alarmas = (props) => {
     alarmNotifData: {
       id: 'efdfoiuad120983102',
     },
+    status: true,
     isEnabled: true,
   }, {
     id: 2,
@@ -32,6 +35,7 @@ const Alarmas = (props) => {
     alarmNotifData: {
       id: 'efdfoiuad120983102',
     },
+    status: false,
     isEnabled: true,
   }, {
     id: 3,
@@ -42,6 +46,7 @@ const Alarmas = (props) => {
     alarmNotifData: {
       id: 'efdfoiuad120983102',
     },
+    status: true,
     isEnabled: true,
   }, {
     id: 4,
@@ -52,6 +57,7 @@ const Alarmas = (props) => {
     alarmNotifData: {
       id: 'efdfoiuad120983102',
     },
+    status: false,
     isEnabled: true,
   }]
   const [isEnabled, setIsEnabled] = useState([true, false, true, true, false]);
@@ -68,6 +74,17 @@ const Alarmas = (props) => {
 
   const keyExtractor = (item, index) => index.toString();
   const renderItem = ({ item }) => {
+    if (item.status === true) {
+      result = {
+        name: 'checkmark-outline',
+        color: 'green',
+      }
+    } else {
+      result = {
+        name: 'close-outline',
+        color: 'red',
+      }
+    }
     return (
       <View style={styles.container}>
         <ListItem>
@@ -75,24 +92,27 @@ const Alarmas = (props) => {
             <ListItem.Title style={styles.titleStyle}>{item.action} {item.medicine}</ListItem.Title>
             <ListItem.Subtitle>{item.date.toString()} {item.time.toString()}</ListItem.Subtitle>
           </ListItem.Content>
-          
-          <Pressable
+
+          {/* <Pressable
             style={styles.buttonStyle}
             onPress={() => {
               console.log(item.value);
               props.delete(item.value);
               PushNotification.cancelLocalNotification(item.alarmNotifData.id);
               console.log("Alarm Deleted with ID: " + item.alarmNotifData.id);
-            }}>
-            <Switch
+            }}> */}
+            <Text>{item.status}</Text>
+            <Ionicons name={result.name} size={32} color={result.color} />
+            {/* <Switch
               trackColor={{ false: 'grey', true: 'tomato' }}
               thumbColor={isEnabled[item.id] ? '#f4f3f4' : 'f4f3f4'}
               ios_backgroundColor='grey'
               onClick={toggleSwitch(item.id, isEnabled[item.id])}
               value={isEnabled[item.id]}
-            />
-          </Pressable>
+            /> */}
+          {/* </Pressable> */}
         </ListItem>
+        <View style={styles.hairline} />
       </View>
     );
   }
@@ -108,6 +128,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  hairline: {
+    backgroundColor: '#888',
+    height: 1,
+    width: '100%',
+  }
 });
 
-export default Alarmas;
+export default Historial;
