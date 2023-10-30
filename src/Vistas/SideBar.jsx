@@ -5,14 +5,13 @@ import { View, StyleSheet, SafeAreaView} from 'react-native';
 import { Drawer as PaperDrawer, Searchbar, IconButton } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../Vistas/Home';
-import Perfil from '../Vistas/Perfil'
-import Tratamientos from '../Vistas/RTratamiento'
-import Historial from '../Vistas/Historial'
-import Chat from '../Vistas/Chat'
+import Perfil from '../Vistas/Perfil';
+import Tratamientos from '../Vistas/RegistrarTratamientos/RTratamiento';
+import Historial from '../Vistas/Historial';
+import Chat from '../Vistas/Chat';
 import Inicio from '../Vistas/LoginRegister/Inicio.jsx';
 import Login from '../Vistas/LoginRegister/Login.jsx';
 import Register from '../Vistas/LoginRegister/Register.jsx';
-import Historial from '../Vistas/Historial.jsx';
 
 const Drawer = createDrawerNavigator();
 
@@ -78,7 +77,6 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Register" component={Register}  />
       <Drawer.Screen name="Home" component={HomeScreen}  />
       <Drawer.Screen name="Perfil" component={Perfil}  />
-      <Drawer.Screen name="Historial" component={Historial}  />
       <Drawer.Screen name="Chat" component={Chat}  />
       <Drawer.Screen name="Tratamientos" component={Tratamientos}  />
       <Drawer.Screen name="Historial" component={Historial}  />
