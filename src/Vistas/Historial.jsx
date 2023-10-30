@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, FlatList, Pressable } from 'react-native';
 import { ListItem } from 'react-native-elements';
@@ -136,3 +137,25 @@ const styles = StyleSheet.create({
 });
 
 export default Historial;
+=======
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+
+const Historial = () => {
+    return (
+      <View style={styles.container}>
+        <Text>Hola Hola hola hola mundo</Text>
+      </View>
+    );
+  };
+  
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
+  
+  export default Historial;
+>>>>>>> master
