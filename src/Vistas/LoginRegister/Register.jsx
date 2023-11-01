@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, ImageBackground, Alert } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { IconButton } from 'react-native-paper';
@@ -16,6 +16,38 @@ const Register = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const nombreInputRef = useRef(null);
+  const apellidoInputRef = useRef(null);
+  const generoInputRef = useRef(null);
+  const dniInputRef = useRef(null);
+  const fechaNacimientoInputRef = useRef(null);
+  const emailInputRef = useRef(null);
+  const passwordInputRef = useRef(null);
+  const confirmPasswordInputRef = useRef(null);
+  
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setNombre('');
+      setApellido('');
+      setGenero('');
+      setDni('');
+      setFechaNacimiento('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      nombreInputRef.current?.clear();
+      apellidoInputRef.current?.clear();
+      generoInputRef.current?.clear();
+      dniInputRef.current?.clear();
+      fechaNacimientoInputRef.current?.clear();
+      emailInputRef.current?.clear();
+      passwordInputRef.current?.clear();
+      confirmPasswordInputRef.current?.clear();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const handleSubmit = () => {
     if (password !== confirmPassword) {
       Alert.alert('Las contraseñas no coinciden');
@@ -32,7 +64,7 @@ const Register = ({ navigation }) => {
       password,
     });
 
-    // Aquí puedes agregar la lógica para registrar al usuario
+    // Lógica para registrar al usuario
   };
 
   return (
