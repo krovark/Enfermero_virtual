@@ -1,21 +1,31 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Switch } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 const Tratamientos = () => {
   const [tratamineto, setTratamiento] = useState(''); // State to hold the input text
-  const [horario, setHorario] = useState('');
   const [notas, setNotas] = useState('');
   const [isToggled, setToggled] = useState(false);
   const toggleSwitch = () => {
     setToggled((previousState) => !previousState);
   };
+  const [time, setTime] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  const onChange = (event, selectedTime) => {
+    if (selectedTime) {
+      setShowPicker(false);
+      setTime(selectedTime);
+    }
+  };
   const handleSubmit = () => {
     // Do something with the user's input (e.g., save it to a variable or send it to a server)
-    console.log('Tratamiento:', tratamineto,'Horario:', horario,'Notas:', notas);
+    console.log('Tratamiento:', tratamineto,'Horario:', time,'Notas:', notas, 'Alarma:', isToggled);
     };
     return (
       <View style={styles.container}>
+        
       <Text style={styles.labels}>Recordatorio de tratamiento</Text>
       <TextInput
         placeholder="Identificacion del recordatorio"
@@ -23,13 +33,20 @@ const Tratamientos = () => {
         onChangeText={(input) => setTratamiento(input)}
         value={tratamineto}
       />
+
       <Text style={styles.labels}>Horario del tartamiento</Text>
-      <TextInput
-        placeholder="Hora"
-        style={styles.input}
-        onChangeText={(input) => setHorario(input)}
-        value={horario}
-      />
+      <Button title="Seleccionar horario" onPress={() => setShowPicker(true)} />
+      {showPicker && (
+        <DateTimePicker
+          value={time}
+          mode="time"
+          is24Hour={false}
+          display="default"
+          onChange={onChange}
+        />
+      )}
+      <Text style={styles.labels}>Horario seleccionado: {time.toLocaleTimeString()}</Text>
+
       <Text style={styles.labels}>Notas sobre el tratamiento</Text>
       <TextInput
         placeholder="Notas"
@@ -37,6 +54,7 @@ const Tratamientos = () => {
         onChangeText={(input) => setNotas(input)}
         value={notas}
       />
+      
       <Text style={styles.labels}>Alarma:</Text>
       <Switch
         trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -45,7 +63,6 @@ const Tratamientos = () => {
         onValueChange={toggleSwitch}
         value={isToggled}
       />
-      <Text>{isToggled ? "Activada" : "No activada"}</Text>
       <Button
         title="Agregar recordatorio"
         onPress={handleSubmit}
@@ -80,6 +97,7 @@ const styles = StyleSheet.create({
 
   labels:{
     fontSize: 16,
+    padding: 10,
   },
 });
 
