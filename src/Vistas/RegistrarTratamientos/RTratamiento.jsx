@@ -1,40 +1,53 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button  } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Switch } from 'react-native';
+
 
 const Tratamientos = () => {
   const [tratamineto, setTratamiento] = useState(''); // State to hold the input text
   const [horario, setHorario] = useState('');
   const [notas, setNotas] = useState('');
+  const [isToggled, setToggled] = useState(false);
+  const toggleSwitch = () => {
+    setToggled((previousState) => !previousState);
+  };
   const handleSubmit = () => {
     // Do something with the user's input (e.g., save it to a variable or send it to a server)
-    console.log('User input:', tratamineto);
+    console.log('Tratamiento:', tratamineto,'Horario:', horario,'Notas:', notas);
     };
     return (
-      <View>
-      <Text>Recordatorio de tratamiento</Text>
+      <View style={styles.container}>
+      <Text style={styles.labels}>Recordatorio de tratamiento</Text>
       <TextInput
-        label="Tratamiento"
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+        placeholder="Identificacion del recordatorio"
+        style={styles.input}
         onChangeText={(input) => setTratamiento(input)}
         value={tratamineto}
       />
-      <Text>Horario</Text>
+      <Text style={styles.labels}>Horario del tartamiento</Text>
       <TextInput
-        label="Horario"
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+        placeholder="Hora"
+        style={styles.input}
         onChangeText={(input) => setHorario(input)}
         value={horario}
       />
-      <Text>Notas</Text>
+      <Text style={styles.labels}>Notas sobre el tratamiento</Text>
       <TextInput
-        label="Notas"
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+        placeholder="Notas"
+        style={styles.input}
         onChangeText={(input) => setNotas(input)}
         value={notas}
       />
-      <Text>Alarma</Text>
+      <Text style={styles.labels}>Alarma:</Text>
+      <Switch
+        trackColor={{ false: "#767577", true: "#81b0ff" }}
+        thumbColor={isToggled ? "#f5dd4b" : "#f4f3f4"}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={toggleSwitch}
+        value={isToggled}
+      />
+      <Text>{isToggled ? "Activada" : "No activada"}</Text>
       <Button
-        title="Submit"
+        title="Agregar recordatorio"
         onPress={handleSubmit}
       />
     </View>
