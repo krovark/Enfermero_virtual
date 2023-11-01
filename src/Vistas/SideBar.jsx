@@ -5,10 +5,13 @@ import { View, StyleSheet, SafeAreaView} from 'react-native';
 import { Drawer as PaperDrawer, Searchbar, IconButton } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../Vistas/Home';
-import Perfil from '../Vistas/Perfil'
-import Tratamientos from '../Vistas/RTratamiento'
-import Alarmas from '../Vistas/Alarmas'
-import Chat from '../Vistas/Chat'
+import Perfil from '../Vistas/Perfil';
+import Tratamientos from '../Vistas/RegistrarTratamientos/RTratamiento';
+import Historial from '../Vistas/Historial';
+import Chat from '../Vistas/Chat';
+import Inicio from '../Vistas/LoginRegister/Inicio.jsx';
+import Login from '../Vistas/LoginRegister/Login.jsx';
+import Register from '../Vistas/LoginRegister/Register.jsx';
 
 const Drawer = createDrawerNavigator();
 
@@ -28,7 +31,7 @@ const CustomDrawerContent = (props) => {
       <PaperDrawer.Item
         icon="home"
         label="Home"
-        onPress={() => props.navigation.navigate('Inicio')}
+        onPress={() => props.navigation.navigate('Home')}
       />
       <PaperDrawer.Item
         icon="plus"
@@ -41,14 +44,9 @@ const CustomDrawerContent = (props) => {
         onPress={() => props.navigation.navigate('Perfil')}
       />
       <PaperDrawer.Item
-        icon="alarm"
-        label="Alarmas"
-        onPress={() => props.navigation.navigate('Alarmas')}
-      />
-      <PaperDrawer.Item
         icon="history"
         label="Historial"
-        onPress={() => props.navigation.navigate('History')}
+        onPress={() => props.navigation.navigate('Historial')}
       />
       
       <PaperDrawer.Item
@@ -74,11 +72,14 @@ const DrawerNavigator = () => {
   return (
     <NavigationContainer>
     <Drawer.Navigator initialRouteName="Inicio" drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Inicio" component={HomeScreen}  />
+      <Drawer.Screen name="Inicio" component={Inicio}  />
+      <Drawer.Screen name="Login" component={Login}  />
+      <Drawer.Screen name="Register" component={Register}  />
+      <Drawer.Screen name="Home" component={HomeScreen}  />
       <Drawer.Screen name="Perfil" component={Perfil}  />
       <Drawer.Screen name="Chat" component={Chat}  />
       <Drawer.Screen name="Tratamientos" component={Tratamientos}  />
-      <Drawer.Screen name="Alarmas" component={Alarmas}  />
+      <Drawer.Screen name="Historial" component={Historial}  />
     </Drawer.Navigator>
     </NavigationContainer>
   );

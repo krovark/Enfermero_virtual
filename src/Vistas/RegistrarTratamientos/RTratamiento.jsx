@@ -41,12 +41,33 @@ const Tratamientos = () => {
     );
   };
   
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  });
-  
-  export default Tratamientos;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor:  '#dcdcdc',
+    
+  },
+
+  tratamientos_container:{
+    margin: 15,
+
+
+  },
+
+  input: {
+    marginBottom: 15,
+    backgroundColor: 'white', // Color de fondo para el TextInput
+    borderRadius: 5,          // bordes redondeados para el TextInput
+    elevation: 2,             // sombra para darle un poco de elevación al TextInput
+    paddingHorizontal: 12,
+    height: 56,
+  },
+
+  labels:{
+    fontSize: 16,
+  },
+});
+
+export default Tratamientos;
