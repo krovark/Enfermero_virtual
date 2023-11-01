@@ -19,6 +19,7 @@ const Tratamientos = () => {
       setTime(selectedTime);
     }
   };
+
   const handleSubmit = () => {
     // Do something with the user's input (e.g., save it to a variable or send it to a server)
     console.log('Tratamiento:', tratamineto,'Horario:', time,'Notas:', notas, 'Alarma:', isToggled);
@@ -26,9 +27,9 @@ const Tratamientos = () => {
     return (
       <View style={styles.container}>
         
-      <Text style={styles.labels}>Recordatorio de tratamiento</Text>
+      <Text style={styles.labels}>Identificacion del tratamiento</Text>
       <TextInput
-        placeholder="Identificacion del recordatorio"
+        placeholder="Nombre"
         style={styles.input}
         onChangeText={(input) => setTratamiento(input)}
         value={tratamineto}
@@ -51,6 +52,7 @@ const Tratamientos = () => {
       <TextInput
         placeholder="Notas"
         style={styles.input}
+        multiline={true}
         onChangeText={(input) => setNotas(input)}
         value={notas}
       />
