@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Alert } from 'react-native';
 import { Button, TextInput as TextInputPaper, IconButton } from 'react-native-paper';
+import validator from 'validator';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -21,6 +22,17 @@ const Login = ({ navigation }) => {
   }, [navigation]);
 
   const handleSubmit = () => {
+    if (!validator.isEmail(email)) {
+      Alert.alert('El correo electrónico es inválido');
+      return;
+    }
+  
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      Alert.alert('La contraseña es inválida');
+      return;
+    }
+  
     console.log('Email:', email);
     console.log('Password:', password);
   };
