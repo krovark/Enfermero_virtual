@@ -40,7 +40,7 @@ const Inicio = ({ navigation }) => {
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         <View style={paperStyle}>
           <View style={{ textAlign: 'right' }}>
-            <Text style={titleStyle}>SaludApp</Text>
+            <Text style={titleStyle}>SeguiMed</Text>
             <Text style={subtitleStyle}>Asistente médico virtual</Text>
           </View>
           <View style={buttonContainerStyle}>
