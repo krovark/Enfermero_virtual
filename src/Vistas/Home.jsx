@@ -17,8 +17,17 @@ const HomeScreen = () => {
     fontSize: 18,
   };
 
+  const tittleStyle={
+    fontSize: 32,
+    fontWeight: 'bold',
+    textAlign:'center',
+  };
+
   return (
     <View>
+      <View style={{textAlign: 'center'}}>
+        <Text style={tittleStyle}>SeguiMed</Text>
+      </View>
       <Calendar
 
         style={{
