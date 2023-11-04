@@ -24,7 +24,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <View>
+    <View style={{backgroundColor: 'blue'}}>
       <View style={{textAlign: 'center'}}>
         <Text style={tittleStyle}>SeguiMed</Text>
       </View>
