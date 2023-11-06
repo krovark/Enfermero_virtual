@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
+import { ListItem } from 'react-native-elements';
 import {Button} from 'react-native-paper';
+import { isEnabled } from 'react-native/Libraries/Performance/Systrace';
 
 const HomeScreen = () => {
   const [selected, setSelected] = useState('');
@@ -23,37 +25,46 @@ const HomeScreen = () => {
     textAlign:'center',
   };
 
+  const subtittleStyle={
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign:'left',
+  };
+
+  const tratamientos = [
+    {
+      id:'001',
+      nombre:'Tratamiento 1',
+    },
+    
+
+    {
+      id:'002',
+      nombre:'Tratamiento 2',
+    },
+    
+  ]
+
   return (
     <View style={{backgroundColor: 'blue'}}>
       <View style={{textAlign: 'center'}}>
         <Text style={tittleStyle}>SeguiMed</Text>
       </View>
-      <Calendar
+      <View style={{textAlign: 'left'}}>
+        <Text style={subtittleStyle}>Tratamientos</Text>
+        <View style={styles.container}>
+          <ListItem.Title style={styles.titleStyle}>{tratamientos.nombre}</ListItem.Title>
+        </View>
+      </View>
 
-        style={{
-          borderWidth: 1,
-          borderColor: 'gray',
-          height: 350
-        }}
+      <View style={{textAlign: 'left'}}>
+        <Text style={subtittleStyle}>Alarmas</Text>
+      </View>
 
-        theme={{
-          backgroundColor: '#ffffff',
-          calendarBackground: '#ffffff',
-          textSectionTitleColor: '#b6c1cd',
-          selectedDayBackgroundColor: '#00adf5',
-          selectedDayTextColor: '#ffffff',
-          todayTextColor: '#00adf5',
-          dayTextColor: '#2d4150',
-          textDisabledColor: '#d9e000'
-        }}
+      <View style={{textAlign: 'left'}}>
+        <Text style={subtittleStyle}>Turnos Medicos</Text>
+      </View>
 
-        onDayPress={day => {
-          setSelected(day.dateString);
-        }}
-        markedDates={{
-          [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'violet'}
-        }}
-      />
       <View style={buttonContainerStyle}>
         <Button mode="contained" style={buttonStyle} buttonColor='red'>SOS</Button>
 
