@@ -19,13 +19,13 @@ const HomeScreen = () => {
     fontSize: 18,
   };
 
-  const titleStyle={
+  const tittleStyle={
     fontSize: 32,
     fontWeight: 'bold',
     textAlign:'center',
   };
 
-  const subtitleStyle={
+  const subtittleStyle={
     fontSize: 24,
     fontWeight: 'bold',
     textAlign:'left',
@@ -35,50 +35,34 @@ const HomeScreen = () => {
     {
       id:'001',
       nombre:'Tratamiento 1',
-      medicine:'Artamina',
-      action: '50 mg',
-      status: true,
-      isEnabled: true,
     },
-  
+    
 
     {
       id:'002',
       nombre:'Tratamiento 2',
-      medicine:'Propanelida',
-      action: '1 comprimido',
-      status: true,
-      isEnabled: true,
     },
     
   ]
 
   return (
-    <View style={{backgroundColor: 'grey'}}>
+    <View style={{backgroundColor: 'blue'}}>
       <View style={{textAlign: 'center'}}>
-        <Text style={titleStyle}>SeguiMed</Text>
+        <Text style={tittleStyle}>SeguiMed</Text>
       </View>
       <View style={{textAlign: 'left'}}>
-        <Text style={subtitleStyle}>Tratamientos</Text>
+        <Text style={subtittleStyle}>Tratamientos</Text>
         <View style={styles.container}>
-          <ListItem>
-            <ListItem.Content>
-              <ListItem.Title style={titleStyle}>{tratamientos.action} {tratamientos.medicine}</ListItem.Title>
-              
-             </ListItem.Content>
-            <Text>{tratamientos.status}</Text>
-
-          </ListItem>
-         <View style={styles.hairline} />
+          <ListItem.Title style={styles.titleStyle}>{tratamientos.nombre}</ListItem.Title>
         </View>
       </View>
 
       <View style={{textAlign: 'left'}}>
-        <Text style={subtitleStyle}>Alarmas</Text>
+        <Text style={subtittleStyle}>Alarmas</Text>
       </View>
 
       <View style={{textAlign: 'left'}}>
-        <Text style={subtitleStyle}>Turnos Medicos</Text>
+        <Text style={subtittleStyle}>Turnos Medicos</Text>
       </View>
 
       <View style={buttonContainerStyle}>
@@ -88,16 +72,13 @@ const HomeScreen = () => {
     </View>
   );
   };
-
+  
   const styles = StyleSheet.create({
     container: {
       flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
-    hairline: {
-      backgroundColor: '#888',
-      height: 1,
-      width: '100%',
-    }
   });
   
   export default HomeScreen;
