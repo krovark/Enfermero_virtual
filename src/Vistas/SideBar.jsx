@@ -12,6 +12,7 @@ import Chat from '../Vistas/Chat';
 import Inicio from '../Vistas/LoginRegister/Inicio.jsx';
 import Login from '../Vistas/LoginRegister/Login.jsx';
 import Register from '../Vistas/LoginRegister/Register.jsx';
+import VisitasMedicas from './RegistrarTratamientos/RVisitaMedica.jsx';
 
 const Drawer = createDrawerNavigator();
 
@@ -37,6 +38,11 @@ const CustomDrawerContent = (props) => {
         icon="plus"
         label="Tratamientos"
         onPress={() => props.navigation.navigate('Tratamientos')}
+      />
+      <PaperDrawer.Item
+        icon="plus"
+        label="Visitas Medicas"
+        onPress={() => props.navigation.navigate('VisitasMedicas')}
       />
       <PaperDrawer.Item
         icon="account"
@@ -80,6 +86,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Chat" component={Chat}  />
       <Drawer.Screen name="Tratamientos" component={Tratamientos}  />
       <Drawer.Screen name="Historial" component={Historial}  />
+      <Drawer.Screen name="VisitasMedicas" component={VisitasMedicas}  />
     </Drawer.Navigator>
     </NavigationContainer>
   );

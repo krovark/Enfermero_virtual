@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, TextInput, Button, Switch, ScrollView } from 'react-native';
+import { Text, StyleSheet, Switch, ScrollView, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import { Button, TextInput } from 'react-native-paper';
 
 
 const Tratamientos = () => {
@@ -29,19 +30,20 @@ const Tratamientos = () => {
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={styles.container}
-      extraHeight={100} // Adjust this value as needed
+      extraHeight={50} // Adjust this value as needed
     >
       <ScrollView contentContainerStyle={styles.inner}>
-      <Text style={styles.labels}>Identificacion del tratamiento:</Text>
       <TextInput
-        placeholder="e.g., Pastillas para la tension"
+        label="Nombre"
         style={styles.input}
         onChangeText={(input) => setTratamiento(input)}
         value={tratamineto}
+        mode="outlined"
       />
 
-      <Text style={styles.labels}>Horario del tartamiento:</Text>
-      <Button title="Seleccionar horario inicial" onPress={() => setShowPicker(true)} />
+      <Button mode="contained" style={styles.button} onPress={() => setShowPicker(true)}>
+        Hora: {time.toLocaleTimeString([], { hour12: true})}
+      </Button>
       {showPicker && (
         <DateTimePicker
           value={time}
@@ -51,38 +53,42 @@ const Tratamientos = () => {
           onChange={onChange}
         />
       )}
-      <Text style={styles.labels}>Horario seleccionado: {time.toLocaleTimeString()}</Text>
 
-      <Text>Frecuencia del tratamiento en horas:</Text>
       <TextInput
+        label="Frecuencia en horas"
         style={styles.input}
-        placeholder="e.g., 6"
         value={horas}
         onChangeText={(input) => setHoras(input)}
-        keyboardType="numeric" // Display a numeric keyboard
+        keyboardType="numeric"
+        mode="outlined"
       />
 
-      <Text style={styles.labels}>Notas sobre el tratamiento:</Text>
       <TextInput
-        placeholder="e.g., Pastillas de color azul"
+        label="Descripcion"
         style={styles.input}
         multiline={true}
         onChangeText={(input) => setNotas(input)}
         value={notas}
+        mode="outlined"
       />
+      <View style={styles.row}>
+        <Text style={styles.labels}>Alarma:</Text>
+        <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={isToggled ? "#f5dd4b" : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isToggled}
+        />
+      </View>
 
-      <Text style={styles.labels}>Alarma:</Text>
-      <Switch
-        trackColor={{ false: "#767577", true: "#81b0ff" }}
-        thumbColor={isToggled ? "#f5dd4b" : "#f4f3f4"}
-        ios_backgroundColor="#3e3e3e"
-        onValueChange={toggleSwitch}
-        value={isToggled}
-      />
       <Button
-        title="Agregar tratamiento"
+        mode="contained" 
+        style={styles.button}
         onPress={handleSubmit}
-      />
+      >
+      Agregar tratamiento
+      </Button>
       </ScrollView>
     </KeyboardAwareScrollView>
   );
@@ -92,36 +98,44 @@ const Tratamientos = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
+    padding: 35,
   },
 
   inner: {
     flex: 1,
-    padding: 20,
+    padding: 30,
     backgroundColor: '#dcdcdc',
-    justifyContent: "flex-end",
+    justifyContent: "space-evenly",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    borderWidth: 5,
+    borderBlockColor: '#663399',
+    gap: 5,
   },
 
   tratamientos_container: {
     margin: 15,
+  },
 
-
+  button: {
+    marginTop: 10,
+    marginBottom: 10,
   },
 
   input: {
-    marginBottom: 15,
-    backgroundColor: 'white', // Color de fondo para el TextInput
-    borderRadius: 5,          // bordes redondeados para el TextInput
-    elevation: 2,             // sombra para darle un poco de elevación al TextInput
-    paddingHorizontal: 12,
-    height: 56,
+    marginBottom: 10,
   },
-
-
 
   labels: {
     fontSize: 16,
-    padding: 10,
+    padding: 8,
+  },
+
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
