@@ -5,29 +5,35 @@ import { Button } from 'react-native-paper';
 const Inicio = ({ navigation }) => {
   const paperStyle = {
     padding: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    width: 360,
+    height: 200,
+    borderRadius: 10,
   };
 
   const buttonContainerStyle = {
+    marginTop: 15,
     flexDirection: 'row',
     justifyContent: 'center',
   };
 
   const buttonStyle = {
+    width: 150 ,
     margin: 10,
     padding: 10,
     fontSize: 16,
+
   };
 
   const titleStyle = {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: 'bold',
-    textAlign: 'right',
+    textAlign: 'center',
   };
 
   const subtitleStyle = {
-    fontSize: 18,
-    textAlign: 'right',
+    fontSize: 20,
+    textAlign: 'center',
   };
 
   const ingresarButtonStyle = {
