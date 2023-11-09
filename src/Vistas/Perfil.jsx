@@ -1,27 +1,56 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, Image, Modal, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard   } from 'react-native';
+import { View, Text, StyleSheet, Image, Modal, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, TouchableOpacity   } from 'react-native';
 import { IconButton, Avatar, TextInput, Button, HelperText  } from 'react-native-paper';
 import ProfileImg from '../../assets/Avatar.png'
 import PhoneInput from 'react-native-phone-input';
+import * as ImagePicker from 'expo-image-picker';
+
 
 
 
 const Perfil = () => {
     const [name, setName] = useState("Itunuoluwa Abidoye");
     const [edad, setEdad] = useState("45");
-    const [location, setLocation] = useState("Formosa, Argentina");
     const [phone, setPhone] = useState("0123456789");
     const [bloodType, setBloodType] = useState("");
     const [peso, setPeso] = useState('');
     const [altura, setAltura] = useState('');
     const [emergencyContact, setEmergencyContact] = useState("");
+    const [isSelected, setSelection] = useState(false);
 
 
-  
+
+    const [profileImage, setProfileImage] = useState(ProfileImg);
     const [isEditable, setIsEditable] = useState(false); // Nuevo estado
 
     const toggleEditable = () => {
         setIsEditable(!isEditable);
+    };
+
+    const takePhoto = async () => {
+        
+        if (!isEditable) {
+          
+          return;
+        }
+        const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
+
+
+    if (cameraPermission.status !== 'granted') {
+        Alert.alert("Permiso necesario", "Es necesario el permiso para acceder a las fotos.");
+        return;
+      }
+
+      let result = await ImagePicker.launchCameraAsync ({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled && result.assets) {
+        setProfileImage({ uri: result.assets[0].uri });
+      }
     };
 
     const getTextInputStyle = (isEditable) => {
@@ -51,34 +80,18 @@ const Perfil = () => {
                 {!isEditable && <IconButton icon="pencil" size={20} onPress={toggleEditable} />}
                 </View>
             <View style={styles.avatarSection}>
-                <Avatar.Image size={130} source={ProfileImg} />
-                
-                 
-                {/* <TextInput
-                    label="Nombre y Edad"
-                    editable = {false}
-                    value={name}
-                    onChangeText={setName}
-                    style={styles.name}
-                /> */}
+                {/* <Avatar.Image size={130} source={ProfileImg} /> */}
+                <TouchableOpacity onPress={takePhoto} disabled={!isEditable}>
+                <Avatar.Image size={130} source={profileImage} />
+                </TouchableOpacity>
+
+
                 <Text style={styles.nombre_edad}>
                     {name},{edad}
                 
                 </Text>
             </View>
             
-            
-
-            {/* <PhoneInput
-                ref={phoneRef}               
-                initialCountry=' ' // Por defecto Argentina, puedes cambiarlo
-                value={phone}
-                onChangePhoneNumber={setPhone}
-                disable={!isEditable}
-                // textStyle={isEditable ? styles.phoneInputText : styles.phoneInputTextDisabled} // Asegúrate de estilizarlo correctamente
-                // style={styles.phoneInputContainer}
-                style={isEditable ? styles.phoneInputContainer : styles.phoneInputDisabled}
-            /> */}
 
             <TouchableWithoutFeedback onPress={(e) => e.preventDefault()}>
                 <View pointerEvents={isEditable ? 'auto' : 'none'}>
@@ -141,6 +154,17 @@ const Perfil = () => {
                 )
             }
               </View>
+
+              <TouchableOpacity
+        style={styles.checkboxBase}
+        onPress={() => setSelection(!isSelected)}
+      >
+        {isSelected && <View style={styles.checkboxChecked} />}
+        
+      </TouchableOpacity>
+
+      <Text style={styles.label}> Emails recordatorios</Text>
+
               <View style={{ height: 70 }} />
         </ScrollView>
         
@@ -153,7 +177,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor:  '#dcdcdc'
+        backgroundColor:  '#dcdcdc',
+        
     },
     cardContainer: { // Estilo del contenedor de tarjeta
         padding: 20,
@@ -240,7 +265,34 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: '600',
-    }
+    },
+
+    checkboxBase: {
+        marginTop: 20,
+        marginLeft: 10,
+        width: 24,
+        height: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: 'coral',
+        backgroundColor: 'transparent',
+        borderRadius: 4,
+        marginRight: 8,
+      },
+      checkboxChecked: {
+        width: 12,
+        height: 12,
+        backgroundColor: 'coral',
+      },
+
+      label:{
+
+        marginTop: 7,
+        marginLeft: 7,
+        color: 'purple'
+
+      },
 });
   
   export default Perfil;
