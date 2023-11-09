@@ -13,12 +13,19 @@ import Inicio from '../Vistas/LoginRegister/Inicio.jsx';
 import Login from '../Vistas/LoginRegister/Login.jsx';
 import Register from '../Vistas/LoginRegister/Register.jsx';
 import VisitasMedicas from './RegistrarTratamientos/RVisitaMedica.jsx';
+import { AuthProvider, useAuth } from '../utils/AuthContext.js';
+import { CommonActions } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 
+
+
+
 const CustomDrawerContent = (props) => {
     const [searchQuery, setSearchQuery] = React.useState('');  // Estado para el Searchbar
+    const { logout, navigationRef } = useAuth();
 
+   
 
   return (
     
@@ -65,32 +72,50 @@ const CustomDrawerContent = (props) => {
       icon="logout"
       label="Cerrar Sesión"
       onPress={() => {
-        // Lógica para cerrar sesión
-      }}
+          logout();
+    
+        }}
     />
     </View>
     </PaperDrawer.Section>
      
   );
-};
+
+    };
 
 const DrawerNavigator = () => {
+  const { user, navigationRef } = useAuth();
   return (
-    <NavigationContainer>
-    <Drawer.Navigator initialRouteName="Inicio" drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Inicio" component={Inicio}  />
-      <Drawer.Screen name="Login" component={Login}  />
-      <Drawer.Screen name="Register" component={Register}  />
+    <NavigationContainer ref={navigationRef} >
+
+
+  {user ? (
+        
+      <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} ref={navigationRef} />}>
       <Drawer.Screen name="Home" component={HomeScreen}  />
       <Drawer.Screen name="Perfil" component={Perfil}  />
       <Drawer.Screen name="Chat" component={Chat}  />
       <Drawer.Screen name="Tratamientos" component={Tratamientos}  />
       <Drawer.Screen name="Historial" component={Historial}  />
       <Drawer.Screen name="VisitasMedicas" component={VisitasMedicas}  />
+        </Drawer.Navigator>
+      ) : (
+
+
+    <Drawer.Navigator initialRouteName="Inicio" >
+      <Drawer.Screen name="Inicio" component={Inicio}  />
+      <Drawer.Screen name="Login" component={Login}  />
+      <Drawer.Screen name="Register" component={Register}  />
+      
     </Drawer.Navigator>
+      )}
+
+
+
     </NavigationContainer>
   );
 };
+
 
 const styles = StyleSheet.create({
   drawer: {
