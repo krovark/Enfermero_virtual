@@ -26,23 +26,25 @@ const HomeScreen = () => {
     {
       id:'001',
       nombre:'Tratamiento 1',
+      tiempo:'24 min',
     },
     
 
     {
       id:'002',
       nombre:'Tratamiento 2',
+      tiempo:'57 min',
     },
   ]
   
   const alarmas = [
-    { id: '001', nombre: 'Alarma 1' },
-    { id: '002', nombre: 'Alarma 2' },
+    { id: '001', nombre: 'Alarma 1', tiempo:'103 min' },
+    { id: '002', nombre: 'Alarma 2', tiempo:'240 min' },
    ];
    
    const turnosMedicos = [
-    { id: '001', nombre: 'Turno 1' },
-    { id: '002', nombre: 'Turno 2' },
+    { id: '001', nombre: 'Turno 1', fecha:'12/12/2023' },
+    { id: '002', nombre: 'Turno 2', fecha:'08/05/2024' },
    ];
 
 
@@ -61,7 +63,7 @@ const HomeScreen = () => {
           <FlatList
             data={tratamientos}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}</Text>}
+            renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}          {item.tiempo}</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
           />
         </View>
@@ -71,7 +73,7 @@ const HomeScreen = () => {
           <FlatList
             data={alarmas}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}</Text>}
+            renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}            {item.tiempo}</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
           />
         </View>
@@ -81,7 +83,7 @@ const HomeScreen = () => {
           <FlatList
             data={turnosMedicos}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}</Text>}
+            renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}             {item.fecha}</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
           />
         </View>
