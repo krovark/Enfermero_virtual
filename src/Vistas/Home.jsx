@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, FlatList,ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, FlatList,ImageBackground, Alert } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { IconButton} from 'react-native-paper';
 
@@ -93,7 +93,7 @@ const HomeScreen = () => {
             icon={(props) => <Icon {...props} name="phone" color="red" size={45}/>}
             size={50}
             color="white"
-            onPress={() => console.log('Pressed')}
+            onPress={() =>  Alert.alert('Desea llamar a su numero de emergencia?')}
           />
           <Text style={{color: 'black', fontSize: 20, marginBottom: 5}}>SOS</Text>
         </View>
