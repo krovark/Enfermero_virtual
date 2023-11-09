@@ -1,11 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, Alert } from 'react-native';
 import { Button, TextInput as TextInputPaper, IconButton } from 'react-native-paper';
 import validator from 'validator';
+import { useAuth } from '../../utils/AuthContext';
+
+const DUMMY_USER = {
+  email: 'admin@gmail.com',
+  password: '123'
+};
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login } = useAuth();
+  
+
 
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
@@ -14,8 +23,11 @@ const Login = ({ navigation }) => {
     const unsubscribe = navigation.addListener('blur', () => {
       setEmail('');
       setPassword('');
-      emailInputRef.current?.clear();
-      passwordInputRef.current?.clear();
+      
+      if (emailInputRef.current && passwordInputRef.current) {
+        emailInputRef.current.clear();
+        passwordInputRef.current.clear();
+      }
     });
 
     return unsubscribe;
@@ -24,36 +36,45 @@ const Login = ({ navigation }) => {
   const handleSubmit = () => {
     if (!validator.isEmail(email)) {
       Alert.alert('El correo electrónico es inválido');
+      console.log(email);
+      console.log(password);
+      
       return;
     }
+
   
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (!passwordRegex.test(password)) {
+    // Verificar si la contraseña es al menos de longitud 3 para el usuario dummy
+    if (password.length < 3) {
       Alert.alert('La contraseña es inválida');
       return;
     }
-  
-    console.log('Email:', email);
-    console.log('Password:', password);
+
+    if (email === DUMMY_USER.email && password === DUMMY_USER.password) {
+      Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión');
+      login({ email });
+      navigation.navigate('Home');
+    } else {
+      Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas');
+    }
   };
 
   return (
-    <ImageBackground source={{ uri: "https://img.freepik.com/foto-gratis/hermosa-joven-doctora-mirando-camara-oficina_1301-7807.jpg" }} style={{ flex: 1, width: '100%', height: '100%' }}>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.4)' }}>
+    <ImageBackground source={{ uri: "https://img.freepik.com/foto-gratis/hermosa-joven-doctora-mirando-camara-oficina_1301-7807.jpg" }} style={styles.backgroundImage}>
+      <View style={styles.container}>
         <IconButton
           icon="arrow-left"
           size={30}
           style={styles.iconButton}
           iconColor='black'
-          onPress={() => navigation.navigate('Inicio')}
+          onPress={() => navigation.goBack()} // Utiliza goBack para volver a la pantalla anterior
         />
-        <Text style={{ fontSize: 24, color: 'white' }}>Iniciar Sesión</Text>
-        <View style={{ width: '80%' }}>
+        <Text style={styles.titleText}>Iniciar Sesión</Text>
+        <View style={styles.formContainer}>
           <TextInputPaper
             ref={emailInputRef}
             label="Email"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(text) => setEmail(text.toLowerCase())}
             style={styles.input}
             mode="outlined"
           />
@@ -61,7 +82,7 @@ const Login = ({ navigation }) => {
             ref={passwordInputRef}
             label="Contraseña"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(text) => setPassword(text.toLowerCase())}
             style={styles.input}
             mode="outlined"
             secureTextEntry
@@ -76,6 +97,24 @@ const Login = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%'
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.4)'
+  },
+  titleText: {
+    fontSize: 24,
+    color: 'white'
+  },
+  formContainer: {
+    width: '80%'
+  },
   input: {
     marginBottom: 10,
   },
