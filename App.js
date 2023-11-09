@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Platform, Button, SafeAreaView, Text, View } from 'react-native';
 import SideBar from './src/Vistas/SideBar'
-
+import { AuthProvider } from './src/utils/AuthContext';
 
 export default function App() {
   return (
@@ -10,7 +10,9 @@ export default function App() {
 
     <View style={styles.container}>
       <SafeAreaView style={styles.container}>
+        <AuthProvider>
       <SideBar />
+      </AuthProvider>
       <StatusBar style="auto" />
       </SafeAreaView>
     </View>
