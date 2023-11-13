@@ -29,59 +29,75 @@ exports.getUsers = async function (query, page, limit) {
 }
 
 exports.createUser = async function (user) {
-    // Creating a new Mongoose Object by using the new keyword
     var hashedPassword = bcrypt.hashSync(user.password, 8);
-    
+
     var newUser = new User({
-        name: user.name,
+        username: user.username,
+        password: hashedPassword,
+        fechaNacimiento: user.fechaNacimiento,
         email: user.email,
-        date: new Date(),
-        password: hashedPassword
-    })
+        perfil: {
+            nombre: user.nombre,
+            apellido: user.apellido,
+            edad: user.edad,
+            genero: user.genero,
+            telefono: user.telefono,
+            sangreTipo: user.sangreTipo,
+            peso: user.peso,
+            altura: user.altura,
+            c_emergencia: user.c_emergencia,   
+        },
+        
+    });
 
     try {
-        // Saving the User 
         var savedUser = await newUser.save();
-        var token = jwt.sign({
-            id: savedUser._id
-        }, process.env.SECRET, {
-            expiresIn: 86400 // expires in 24 hours
-        });
+        var token = jwt.sign({ id: savedUser._id }, process.env.SECRET, { expiresIn: 86400 });
         return token;
     } catch (e) {
-        // return a Error message describing the reason 
-        console.log(e)    
-        throw Error("Error while Creating User")
+        throw Error("Error al crear el usuario");
     }
 }
 
-exports.updateUser = async function (user) {
+
+// exports.updateUser = async function (user) {
     
-    var id = {name :user.name}
-    console.log(id)
+//     var id = {name :user.name}
+//     console.log(id)
+//     try {
+//         //Find the old User Object by the Id
+//         var oldUser = await User.findOne(id);
+//         console.log (oldUser)
+//     } catch (e) {
+//         throw Error("Error occured while Finding the User")
+//     }
+//     // If no old User Object exists return false
+//     if (!oldUser) {
+//         return false;
+//     }
+//     //Edit the User Object
+//     var hashedPassword = bcrypt.hashSync(user.password, 8);
+//     oldUser.name = user.name
+//     oldUser.email = user.email
+//     oldUser.password = hashedPassword
+//     try {
+//         var savedUser = await oldUser.save()
+//         return savedUser;
+//     } catch (e) {
+//         throw Error("And Error occured while updating the User");
+//     }
+// }
+
+
+exports.updateUser = async function (userId, userData) {
     try {
-        //Find the old User Object by the Id
-        var oldUser = await User.findOne(id);
-        console.log (oldUser)
+        var updatedUser = await User.findByIdAndUpdate(userId, userData, { new: true });
+        return updatedUser;
     } catch (e) {
-        throw Error("Error occured while Finding the User")
-    }
-    // If no old User Object exists return false
-    if (!oldUser) {
-        return false;
-    }
-    //Edit the User Object
-    var hashedPassword = bcrypt.hashSync(user.password, 8);
-    oldUser.name = user.name
-    oldUser.email = user.email
-    oldUser.password = hashedPassword
-    try {
-        var savedUser = await oldUser.save()
-        return savedUser;
-    } catch (e) {
-        throw Error("And Error occured while updating the User");
+        throw Error("Error al actualizar el usuario");
     }
 }
+
 
 exports.deleteUser = async function (id) {
     console.log(id)
@@ -101,26 +117,23 @@ exports.deleteUser = async function (id) {
 
 
 exports.loginUser = async function (user) {
-
-    // Creating a new Mongoose Object by using the new keyword
     try {
-        // Find the User 
-        console.log("login:",user)
-        var _details = await User.findOne({
-            email: user.email
-        });
+        var _details = await User.findOne({ email: user.email });
         var passwordIsValid = bcrypt.compareSync(user.password, _details.password);
         if (!passwordIsValid) return 0;
 
-        var token = jwt.sign({
-            id: _details._id
-        }, process.env.SECRET, {
-            expiresIn: 86400 // expires in 24 hours
-        });
-        return {token:token, user:_details};
+        var token = jwt.sign({ id: _details._id }, process.env.SECRET, { expiresIn: 86400 });
+        return { token: token, user: _details };
     } catch (e) {
-        // return a Error message describing the reason     
-        throw Error("Error while Login User")
+        throw Error("Error al iniciar sesión");
     }
+}
 
+exports.getAllUsers = async function () {
+    try {
+        var users = await User.find({});
+        return users;
+    } catch (e) {
+        throw Error('Error al obtener todos los usuarios');
+    }
 }

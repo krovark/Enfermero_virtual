@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var mongoosePaginate = require('mongoose-paginate');
+var uniqueValidator = require('mongoose-unique-validator');
 
 // Validador personalizado para la fecha de nacimiento
 var validateFechaNacimiento = (fecha) => {
@@ -16,7 +17,7 @@ var perfilSchema = new mongoose.Schema({
         enum: ['M', 'F'],
         message: 'Género no válido. Solo se acepta "M" o "F".'
     },
-    telefono: String,
+    telefono: { type: String, unique: true },
     sangreTipo: String,
     peso: Number,
     altura: Number,
@@ -32,11 +33,12 @@ var UserSchema = new mongoose.Schema({
         required: true,
         validate: [validateFechaNacimiento, 'Formato de fecha inválido. Use dd/mm/aaaa.']
     },
-    email: { type: String, required: true }
+    email: { type: String, required: true, unique: true }
 });
 
 // Agregando el plugin para paginación
 UserSchema.plugin(mongoosePaginate);
+UserSchema.plugin(uniqueValidator, { message: '{PATH} ya registrado' });
 
 // Creando y exportando el modelo
 const User = mongoose.model('User', UserSchema);
