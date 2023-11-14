@@ -9,7 +9,7 @@ exports.getVisitasmed = async function (req, res, next) {
 
     try {
         var Visitasmed = await VisitasmedService.getVisitasmed({}, page, limit);
-        return res.status(200).json({ status: 200, data: Users, message: "Visitas Medicas obtenidas exitosamente" });
+        return res.status(200).json({ status: 200, data: Visitasmed, message: "Visitas Medicas obtenidas exitosamente" });
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
@@ -21,7 +21,7 @@ exports.createVisitasmed = async function (req, res, next) {
 
     try {
         var createdVisitasmed = await VisitasmedService.createVisitasmed(newVisitasmed);
-        return res.status(201).json({ token: createdUser, message: "Visita medica creada exitosamente" });
+        return res.status(201).json({ token: createdVisitasmed, message: "Visita medica creada exitosamente" });
     } catch (e) {
         return res.status(400).json({ status: 400, message: "Error al crear la visita medica" });
     }
@@ -55,7 +55,7 @@ exports.removeVisitasmed = async function (req, res, next) {
 // Obtener todas las visitas medicas
 exports.getAllVisitasmed = async function (req, res, next) {
     try {
-        var allVisitasmed = await VisitasmedService.getAllUsers();
+        var allVisitasmed = await VisitasmedService.getAllVisitasmed();
         return res.status(200).json({ status: 200, data: allVisitasmed, message: "Todas las visitas medicas obtenidas exitosamente" });
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });

@@ -19,5 +19,5 @@ visitasmedSchema.plugin(mongoosePaginate);
 visitasmedSchema.plugin(uniqueValidator, { message: '{PATH} ya registrado' });
 
 // Creando y exportando el modelo
-const Visitasmed = mongoose.model('Visitas Medicas', visitasmedSchemaSchema);
+const Visitasmed = mongoose.model('Visitas Medicas', visitasmedSchema);
 module.exports = Visitasmed;

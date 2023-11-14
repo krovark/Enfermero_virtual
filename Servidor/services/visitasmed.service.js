@@ -18,7 +18,7 @@ exports.getVisitasmed = async function (query, page, limit) {
     try {
         console.log("Query",query)
         var Visitasmed = await Visitasmed.paginate(query, options)
-        // Return the Userd list that was retured by the mongoose promise
+        // Return the visitasmed list that was retured by the mongoose promise
         return Visitasmed;
 
     } catch (e) {
