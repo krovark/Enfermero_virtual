@@ -7,7 +7,7 @@ var tratamientoSchema = new moongose.Schema({
     horario: {type: TimeRanges, required: true},
     notas: {type: String, required: true},
     alarma: {required: true},
-    frecuencia: {type: TimeRanges, required: true},
+    frecuencia: {type: String, required: true},
 });
 
 // Agregando el plugin para paginación
