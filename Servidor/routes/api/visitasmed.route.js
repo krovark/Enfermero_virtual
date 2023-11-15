@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-var UserController = require('../../controllers/visitasmed.controller');
+var VisitasmedController = require('../../controllers/visitasmed.controller');
 var Authorization = require('../../auth/authorization');
 
 

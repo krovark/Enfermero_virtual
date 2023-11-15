@@ -2,11 +2,11 @@ var mongoose = require('mongoose');
 var mongoosePaginate = require('mongoose-paginate');
 var uniqueValidator = require('mongoose-unique-validator');
 
-var tratamientoSchema = new moongose.Schema({
+var tratamientoSchema = new mongoose.Schema({
     tratamieto: {type: String, required: true},
-    horario: {type: TimeRanges, required: true},
+    horario: { type: String, required: true},
     notas: {type: String, required: true},
-    alarma: {required: true},
+    alarma: { type: Boolean, required: true },
     frecuencia: {type: String, required: true},
 });
 

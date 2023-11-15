@@ -1,4 +1,4 @@
-var VisitasmedService = require('../services/visitasmed.service');
+var VisitasmedService = require('../services/visitasmed.service')
 
 _this = this;
 

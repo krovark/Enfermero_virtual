@@ -1,4 +1,4 @@
-var TratamientoService = require('../services/tratamiento.service');
+var TratamientoService = require('../services/tratamiento.services');
 
 _this = this;
 
