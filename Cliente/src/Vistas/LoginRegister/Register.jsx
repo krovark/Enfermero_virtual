@@ -10,7 +10,7 @@ const Register = ({ navigation }) => {
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [genero, setGenero] = useState('');
-  const [dni, setDni] = useState('');
+  
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +19,7 @@ const Register = ({ navigation }) => {
   const nombreInputRef = useRef(null);
   const apellidoInputRef = useRef(null);
   const generoInputRef = useRef(null);
-  const dniInputRef = useRef(null);
+
   const fechaNacimientoInputRef = useRef(null);
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
@@ -30,7 +30,7 @@ const Register = ({ navigation }) => {
       setNombre('');
       setApellido('');
       setGenero('');
-      setDni('');
+      
       setFechaNacimiento('');
       setEmail('');
       setPassword('');
@@ -109,13 +109,6 @@ const Register = ({ navigation }) => {
           )}
           {step === 2 && (
             <>
-              <TextInput
-                label="DNI"
-                value={dni}
-                onChangeText={setDni}
-                style={styles.input}
-                mode="outlined"
-              />
               <TextInput
                 label="Fecha de nacimiento"
                 value={fechaNacimiento}
