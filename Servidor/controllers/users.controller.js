@@ -16,16 +16,51 @@ exports.getUsers = async function (req, res, next) {
 }
 
 // Crear usuario
-exports.createUser = async function (req, res, next) {
-    var newUser = req.body; // Asumimos que req.body ya contiene los campos necesarios
+// exports.createUser = async function (req, res, next) {
+//     var newUser = req.body; 
 
+//     try {
+//         var createdUser = await UserService.createUser(newUser);
+//         return res.status(201).json({ token: createdUser, message: "Usuario creado exitosamente" });
+//     } catch (e) {
+//         return res.status(400).json({ status: 400, message: "Error al crear el usuario" });
+//     }
+// }
+
+exports.createUser = async function (req, res, next) {
+    // Req.Body contains the form submit values.
+    console.log("llegue al controller",req.body)
+    var User = {
+        username:req.body.username,
+        nombre: req.body.nombre,
+        apellido: req.body.apellido,
+        email: req.body.email,
+        telefono: req.body.telefono,
+        password: req.body.password, 
+        sangreTipo: req.body.sangreTipo,
+        peso: req.body.peso,
+        altura: req.body.altura,
+        c_emergencia: req.body.c_emergencia,
+        genero: req.body.genero,
+        edad: req.body.edad
+    }
     try {
-        var createdUser = await UserService.createUser(newUser);
-        return res.status(201).json({ token: createdUser, message: "Usuario creado exitosamente" });
+        // Calling the Service function with the new object from the Request Body
+        var createdUser = await UserService.createUser(User)
+        return res.status(201).json({createdUser, message: "Succesfully Created User"})
     } catch (e) {
-        return res.status(400).json({ status: 400, message: "Error al crear el usuario" });
+        if (e.message === 'El email ya se encuentra registrado.') {
+            // Devolver un código de estado HTTP 409 si el email ya está registrado
+            return res.status(409).json({ message: e.message });
+        }
+        //Return an Error Response Message with Code and the Error Message.
+        console.log(e)
+        console.error(e)
+        return res.status(400).json({status: 400, message: "User Creation was Unsuccesfull"})
     }
 }
+
+
 
 // Actualizar usuario
 exports.updateUser = async function (req, res, next) {
@@ -83,7 +118,9 @@ exports.loginUser = async function (req, res, next) {
             return res.status(201).json({loginUser, message: "Succesfully login"})
     } catch (e) {
         //Return an Error Response Message with Code and the Error Message.
+        console.log(e)
         return res.status(400).json({status: 400, message: "Invalid username or password"})
+        
     }
 }
 

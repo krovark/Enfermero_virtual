@@ -55,7 +55,9 @@ exports.createUser = async function (user) {
         var token = jwt.sign({ id: savedUser._id }, process.env.SECRET, { expiresIn: 86400 });
         return token;
     } catch (e) {
+        console.error(e)
         throw Error("Error al crear el usuario");
+        
     }
 }
 
