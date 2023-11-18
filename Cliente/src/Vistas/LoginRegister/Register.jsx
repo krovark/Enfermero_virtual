@@ -38,7 +38,7 @@ const Register = ({ navigation }) => {
       nombreInputRef.current?.clear();
       apellidoInputRef.current?.clear();
       generoInputRef.current?.clear();
-      dniInputRef.current?.clear();
+      //dniInputRef.current?.clear();
       fechaNacimientoInputRef.current?.clear();
       emailInputRef.current?.clear();
       passwordInputRef.current?.clear();
