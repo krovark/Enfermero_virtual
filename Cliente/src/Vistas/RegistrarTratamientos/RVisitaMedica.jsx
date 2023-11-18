@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, TextInput, Button, Switch, ScrollView } from 'react-native';
+import { Text, StyleSheet, Switch, ScrollView, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import { Button, TextInput } from 'react-native-paper';
 
 
 const VisitasMedicas = () => {
@@ -37,19 +38,20 @@ const VisitasMedicas = () => {
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={styles.container}
-      extraHeight={100} // Adjust this value as needed
+      extraHeight={50} // Adjust this value as needed
     >
       <ScrollView contentContainerStyle={styles.inner}>
-      <Text style={styles.labels}>Visita medica:</Text>
-      <TextInput
-        placeholder="e.g., Cita con el Traumatologo"
+            <TextInput
+        label="Nombre:"
         style={styles.input}
         onChangeText={(input) => setVisitaMedica(input)}
         value={visitaMedica}
+mode="outlined"
       />
 
-        <Text style={styles.labels}>Horario de la cita:</Text>
-        <Button title="Seleccionar fecha" onPress={() => setShowPicker2(true)} />
+        <Button mode="contained" style={styles.button} onPress={() => setShowPicker2(true)}>
+          Fecha: {date.toLocaleDateString()}
+        </Button>
         {showPicker2 && (
             <DateTimePicker
             value={date}
@@ -58,10 +60,10 @@ const VisitasMedicas = () => {
             onChange={onChange2}
             />
         )}
-        <Text style={styles.labels}>Fecha seleccionada: {date.toLocaleDateString()}</Text>
-
-      <Text style={styles.labels}>Horario de la cita:</Text>
-      <Button title="Seleccionar hora" onPress={() => setShowPicker(true)} />
+        
+      <Button mode="contained" style={styles.button} onPress={() => setShowPicker(true)}>
+          Hora: {time.toLocaleTimeString()}
+        </Button>
       {showPicker && (
         <DateTimePicker
           value={time}
@@ -71,17 +73,17 @@ const VisitasMedicas = () => {
           onChange={onChange}
         />
       )}
-      <Text style={styles.labels}>Horario seleccionado: {time.toLocaleTimeString()}</Text>
-
-      <Text style={styles.labels}>Direccion:</Text>
-      <TextInput
-        placeholder="e.g., Hospital Facultad de Medicina, piso 2, consultorio d"
+      
+            <TextInput
+        label="Direccion:"
         style={styles.input}
         multiline={true}
         onChangeText={(input) => setDireccion(input)}
         value={direccion}
+mode="outlined"
       />
 
+<View style={styles.row}>
       <Text style={styles.labels}>Alarma:</Text>
       <Switch
         trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -90,10 +92,14 @@ const VisitasMedicas = () => {
         onValueChange={toggleSwitch}
         value={isToggled}
       />
+</View>
       <Button
-        title="Agregar visita medica"
+        mode="contained" 
+        style={styles.button}
         onPress={handleSubmit}
-      />
+      >
+        Agregar tratamiento
+        </Button>
       </ScrollView>
     </KeyboardAwareScrollView>
   );
@@ -103,36 +109,44 @@ const VisitasMedicas = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
+    padding: 35,
   },
 
   inner: {
     flex: 1,
-    padding: 20,
+    padding: 30,
     backgroundColor: '#dcdcdc',
-    justifyContent: "flex-end",
+    justifyContent: "space-evenly",
+borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    borderWidth: 5,
+    borderBlockColor: '#663399',
+    gap: 5,
   },
 
   tratamientos_container: {
     margin: 15,
+},
 
-
+button: {
+    marginTop: 10,
+    marginBottom: 10,
   },
 
   input: {
-    marginBottom: 15,
-    backgroundColor: 'white', // Color de fondo para el TextInput
-    borderRadius: 5,          // bordes redondeados para el TextInput
-    elevation: 2,             // sombra para darle un poco de elevación al TextInput
-    paddingHorizontal: 12,
-    height: 56,
+    marginBottom: 10,
   },
-
-
 
   labels: {
     fontSize: 16,
-    padding: 10,
+    padding: 8,
+  },
+
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 

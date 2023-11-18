@@ -34,7 +34,7 @@ const Tratamientos = () => {
     >
       <ScrollView contentContainerStyle={styles.inner}>
       <TextInput
-        label="Nombre"
+        label="Nombre:"
         style={styles.input}
         onChangeText={(input) => setTratamiento(input)}
         value={tratamineto}
@@ -42,7 +42,7 @@ const Tratamientos = () => {
       />
 
       <Button mode="contained" style={styles.button} onPress={() => setShowPicker(true)}>
-        Hora: {time.toLocaleTimeString([], { hour12: true})}
+        Hora de inicio: {time.toLocaleTimeString()}
       </Button>
       {showPicker && (
         <DateTimePicker
@@ -55,7 +55,7 @@ const Tratamientos = () => {
       )}
 
       <TextInput
-        label="Frecuencia en horas"
+        label="Frecuencia en horas:"
         style={styles.input}
         value={horas}
         onChangeText={(input) => setHoras(input)}
@@ -64,7 +64,7 @@ const Tratamientos = () => {
       />
 
       <TextInput
-        label="Descripcion"
+        label="Descripcion:"
         style={styles.input}
         multiline={true}
         onChangeText={(input) => setNotas(input)}
