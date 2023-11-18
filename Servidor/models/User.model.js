@@ -30,15 +30,15 @@ var UserSchema = new mongoose.Schema({
     perfil: perfilSchema,
     fechaNacimiento: { 
         type: String,
-        required: true,
+        required: false,
         validate: [validateFechaNacimiento, 'Formato de fecha inválido. Use dd/mm/aaaa.']
     },
     email: { type: String, required: true, unique: true }
-});
+},{collection: 'user'});
 
 // Agregando el plugin para paginación
 UserSchema.plugin(mongoosePaginate);
-UserSchema.plugin(uniqueValidator, { message: '{PATH} ya registrado' });
+//UserSchema.plugin(uniqueValidator, { message: '{PATH} ya registrado' });
 
 // Creando y exportando el modelo
 const User = mongoose.model('User', UserSchema);
