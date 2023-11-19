@@ -115,7 +115,8 @@ exports.loginUser = async function (req, res, next) {
         if (loginUser===0)
             return res.status(400).json({message: "Error en la contraseña"})
         else
-            return res.status(201).json({loginUser, message: "Succesfully login"})
+            res.cookie('jwt', loginResult.token, { httpOnly: true, secure: true });
+            return res.status(201).json({loginUser, message: "Inicio de sesión exitoso"})
     } catch (e) {
         //Return an Error Response Message with Code and the Error Message.
         console.log(e)
