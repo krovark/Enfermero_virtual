@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ImageBackground, Alert } from 'react-native';
 import { Button, TextInput as TextInputPaper, IconButton } from 'react-native-paper';
 import validator from 'validator';
 import { useAuth } from '../../utils/AuthContext';
+import axios from "axios";
 
 const DUMMY_USER = {
   email: 'admin@gmail.com',
@@ -49,14 +50,24 @@ const Login = ({ navigation }) => {
       return;
     }
 
-    if (email === DUMMY_USER.email && password === DUMMY_USER.password) {
-      Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión');
-      login({ email });
-      navigation.navigate('Home');
-    } else {
-      Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas');
-    }
-  };
+
+    axios.post('http://192.168.0.3:4000/api/users/login', { "email": email, "password": password })
+    .then(rest => {
+      const loginCheck = rest.data;
+      console.log('algo estamos chequeando', rest.data)
+      if(rest.data.loginUser.token != 0) {
+        Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión');
+        login({ email });
+        navigation.navigate('Home');
+      }
+    }).catch(function (error) {
+      if (error.response) {
+        Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas');
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      }
+  })};
 
   return (
     <ImageBackground source={{ uri: "https://img.freepik.com/foto-gratis/hermosa-joven-doctora-mirando-camara-oficina_1301-7807.jpg" }} style={styles.backgroundImage}>

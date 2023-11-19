@@ -36,11 +36,6 @@ const HomeScreen = () => {
       tiempo:'57 min',
     },
   ]
-  
-  const alarmas = [
-    { id: '001', nombre: 'Alarma 1', tiempo:'103 min' },
-    { id: '002', nombre: 'Alarma 2', tiempo:'240 min' },
-   ];
    
    const turnosMedicos = [
     { id: '001', nombre: 'Turno 1', fecha:'12/12/2023' },
@@ -64,16 +59,6 @@ const HomeScreen = () => {
             data={tratamientos}
             keyExtractor={item => item.id}
             renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}          {item.tiempo}</Text>}
-            ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
-          />
-        </View>
-  
-        <View style={{ width: '80%', backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: 10, padding: 5, marginBottom: 5 }}>
-          <Text style={subtittleStyle}>Alarmas</Text>
-          <FlatList
-            data={alarmas}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}            {item.tiempo}</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
           />
         </View>
