@@ -4,26 +4,20 @@ import { Button, TextInput as TextInputPaper, IconButton } from 'react-native-pa
 import validator from 'validator';
 import { useAuth } from '../../utils/AuthContext';
 import axios from "axios";
-
-const DUMMY_USER = {
-  email: 'admin@gmail.com',
-  password: '123'
-};
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth();
-  
-
 
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
-      setEmail('');
-      setPassword('');
+      setEmail('3243@gmail.com');
+      setPassword('111');
       
       if (emailInputRef.current && passwordInputRef.current) {
         emailInputRef.current.clear();
@@ -37,37 +31,59 @@ const Login = ({ navigation }) => {
   const handleSubmit = () => {
     if (!validator.isEmail(email)) {
       Alert.alert('El correo electrónico es inválido');
-      console.log(email);
-      console.log(password);
-      
       return;
     }
 
-  
-    // Verificar si la contraseña es al menos de longitud 3 para el usuario dummy
     if (password.length < 3) {
       Alert.alert('La contraseña es inválida');
       return;
     }
 
+   /*  axios.post('http://192.168.68.113:4000/api/users/login', { email, password })
+      .then(async response => {
+        if (response.data && response.data.loginUser && response.data.loginUser.token) {
+          await AsyncStorage.setItem('userToken', response.data.loginUser.token);
+          Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión');
+          login({ email });
+          navigation.navigate('Home');
+        } else {
+          Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas');
+        }
+      })
+      .catch(error => {
+        if (error.response) {
+          Alert.alert('Error de inicio de sesión', error.response.data.message || 'Credenciales incorrectas');
+        } else {
+          console.error(error)
+          Alert.alert('Error de inicio de sesión', 'Error al conectarse al servidor');
+        }
+      });
+  }; */
 
-    axios.post('http://192.168.0.3:4000/api/users/login', { "email": email, "password": password })
-    .then(rest => {
-      const loginCheck = rest.data;
-      console.log('algo estamos chequeando', rest.data)
-      if(rest.data.loginUser.token != 0) {
-        Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión');
-        login({ email });
-        navigation.navigate('Home');
-      }
-    }).catch(function (error) {
-      if (error.response) {
-        Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas');
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      }
-  })};
+  fetch('http://192.168.68.113:4000/api/users/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, password })
+  })
+  .then(async (response) => {
+    const data = await response.json();
+    if (data && data.loginUser && data.loginUser.token) {
+      await AsyncStorage.setItem('userToken', data.loginUser.token);
+      Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión');
+      login({ email });
+      navigation.navigate('Home');
+    } else {
+      Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas');
+    }
+  })
+  .catch(error => {
+    console.error(error)
+    Alert.alert('Error de inicio de sesión', 'Error al conectarse al servidor');
+  });
+};
+
 
   return (
     <ImageBackground source={{ uri: "https://img.freepik.com/foto-gratis/hermosa-joven-doctora-mirando-camara-oficina_1301-7807.jpg" }} style={styles.backgroundImage}>
@@ -77,7 +93,7 @@ const Login = ({ navigation }) => {
           size={30}
           style={styles.iconButton}
           iconColor='black'
-          onPress={() => navigation.goBack()} // Utiliza goBack para volver a la pantalla anterior
+          onPress={() => navigation.goBack()}
         />
         <Text style={styles.titleText}>Iniciar Sesión</Text>
         <View style={styles.formContainer}>
