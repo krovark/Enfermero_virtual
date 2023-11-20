@@ -13,6 +13,7 @@ import Inicio from '../Vistas/LoginRegister/Inicio.jsx';
 import Login from '../Vistas/LoginRegister/Login.jsx';
 import Register from '../Vistas/LoginRegister/Register.jsx';
 import VisitasMedicas from './RegistrarTratamientos/RVisitaMedica.jsx';
+import ResetPW from './LoginRegister/ResetPW.jsx';
 import { AuthProvider, useAuth } from '../utils/AuthContext.js';
 import { CommonActions } from '@react-navigation/native';
 
@@ -47,7 +48,7 @@ const CustomDrawerContent = (props) => {
         onPress={() => props.navigation.navigate('Tratamientos')}
       />
       <PaperDrawer.Item
-        icon="plus"
+        icon="calendar_today"
         label="Visitas Medicas"
         onPress={() => props.navigation.navigate('VisitasMedicas')}
       />
@@ -76,6 +77,8 @@ const CustomDrawerContent = (props) => {
     
         }}
     />
+
+
     </View>
     </PaperDrawer.Section>
      
@@ -104,9 +107,9 @@ const DrawerNavigator = () => {
 
     <Drawer.Navigator initialRouteName="Inicio" >
       <Drawer.Screen name="Inicio" component={Inicio}  />
-      <Drawer.Screen name="Login" component={Login}  />
-      <Drawer.Screen name="Register" component={Register}  />
-      
+      <Drawer.Screen name="Login" component={Login}  options={{ drawerLabel: 'Iniciar Sesión' }}  />
+      <Drawer.Screen name="Register" component={Register} options={{ drawerLabel: 'Registrarse' }}  />
+      <Drawer.Screen name="ResetPW" component={ResetPW} options={{ drawerLabel: 'Recuperar Contraseña' }} />
     </Drawer.Navigator>
       )}
 

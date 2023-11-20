@@ -21,7 +21,8 @@ var perfilSchema = new mongoose.Schema({
     sangreTipo: String,
     peso: Number,
     altura: Number,
-    c_emergencia: String
+    c_emergencia: String,
+    profileURL: String
 });
 
 var UserSchema = new mongoose.Schema({

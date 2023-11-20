@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Alert } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Alert, TouchableOpacity  } from 'react-native';
 import { Button, TextInput as TextInputPaper, IconButton } from 'react-native-paper';
 import validator from 'validator';
 import { useAuth } from '../../utils/AuthContext';
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -60,7 +62,7 @@ const Login = ({ navigation }) => {
       });
   }; */
 
-  fetch('http://192.168.68.113:4000/api/users/login', {
+  fetch('http://192.168.0.103:4000/api/users/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -117,6 +119,12 @@ const Login = ({ navigation }) => {
           <Button mode="contained" onPress={handleSubmit} style={styles.button}>
             Iniciar Sesión
           </Button>
+          <TouchableOpacity
+                    onPress={() => navigation.navigate('ResetPW')} // Navegación a ResetPW
+                    style={styles.forgotPasswordLink}
+                >
+                    <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
+                </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>
@@ -152,6 +160,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     left: 10,
+  },
+  forgotPasswordLink: {
+    marginTop: 15,
+    alignItems: 'center',
+  },
+  forgotPasswordText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 
