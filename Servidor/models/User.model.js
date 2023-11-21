@@ -26,7 +26,7 @@ var perfilSchema = new mongoose.Schema({
 });
 
 var UserSchema = new mongoose.Schema({
-    username: { type: String, required: true },
+    username: { type: String, required: false },
     password: { type: String, required: true },
     perfil: perfilSchema,
     fechaNacimiento: { 

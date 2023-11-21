@@ -34,6 +34,13 @@ exports.getUsers = async function (query, page, limit) {
 }
 
 exports.createUser = async function (user) {
+    // Verificar si ya existe un usuario con el mismo correo electrónico
+    const existingUser = await User.findOne({ email: user.email });
+    if (existingUser) {
+        throw new Error('El correo electrónico ya está registrado.');
+    }
+
+    // Continúa con la creación del usuario si el correo electrónico no está en uso
     var hashedPassword = bcrypt.hashSync(user.password, 8);
 
     var newUser = new User({
@@ -46,13 +53,11 @@ exports.createUser = async function (user) {
             apellido: user.apellido,
             edad: user.edad,
             genero: user.genero,
-            telefono: user.telefono,
             sangreTipo: user.sangreTipo,
             peso: user.peso,
             altura: user.altura,
             c_emergencia: user.c_emergencia,   
         },
-        
     });
 
     try {
@@ -61,8 +66,7 @@ exports.createUser = async function (user) {
         return token;
     } catch (e) {
         console.error(e)
-        throw Error("Error al crear el usuario");
-        
+        throw new Error("Error al crear el usuario");
     }
 }
 

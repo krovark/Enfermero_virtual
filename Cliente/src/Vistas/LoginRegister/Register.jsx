@@ -4,22 +4,30 @@ import { Button, TextInput } from 'react-native-paper';
 import { IconButton } from 'react-native-paper';
 
 
-
 const Register = ({ navigation }) => {
   const [step, setStep] = useState(1);
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [genero, setGenero] = useState('');
   
+  const [altura, setAltura] = useState('');
+  const [peso, setPeso] = useState('');
+  const [sangre, setSangre] = useState('');
+
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [edad, setEdad] = useState('');
+
+  const alturaInputRef = useRef(null);
+  const pesoInputRef = useRef(null);
+  const sangreInputRef = useRef(null);
 
   const nombreInputRef = useRef(null);
   const apellidoInputRef = useRef(null);
   const generoInputRef = useRef(null);
-
+  const edadInputRef = useRef(null);
   const fechaNacimientoInputRef = useRef(null);
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
@@ -30,7 +38,12 @@ const Register = ({ navigation }) => {
       setNombre('');
       setApellido('');
       setGenero('');
-      
+      setEdad('');
+
+      setAltura('');
+      setPeso('');
+      setSangre('');
+
       setFechaNacimiento('');
       setEmail('');
       setPassword('');
@@ -38,11 +51,15 @@ const Register = ({ navigation }) => {
       nombreInputRef.current?.clear();
       apellidoInputRef.current?.clear();
       generoInputRef.current?.clear();
-      //dniInputRef.current?.clear();
+      edadInputRef.current?.clear();
       fechaNacimientoInputRef.current?.clear();
       emailInputRef.current?.clear();
       passwordInputRef.current?.clear();
       confirmPasswordInputRef.current?.clear();
+      alturaInputRef.current?.clear();
+      pesoInputRef.current?.clear();
+      sangreInputRef.current?.clear();
+      
     });
 
     return unsubscribe;
@@ -50,22 +67,49 @@ const Register = ({ navigation }) => {
 
   const handleSubmit = () => {
     if (password !== confirmPassword) {
-      Alert.alert('Las contraseñas no coinciden');
-      return;
+        Alert.alert('Las contraseñas no coinciden');
+        return;
     }
 
-    console.log({
-      nombre,
-      apellido,
-      genero,
-      dni,
-      fechaNacimiento,
-      email,
-      password,
-    });
+    // Datos del usuario a enviar
+    const userData = {
+        nombre,
+        apellido,
+        genero,
+        fechaNacimiento,
+        email,
+        password,
+        altura,
+        peso,
+        sangre,
+        edad
+    };
 
-    // Lógica para registrar al usuario
-  };
+    // Envía la solicitud al backend
+    fetch('http://192.168.0.103:4000/api/users/registration', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => {
+      if (!response.ok) {
+          throw new Error('El correo electrónico ya está registrado.');
+      }
+      return response.json();
+  })
+  .then(data => {
+      Alert.alert(
+          "Registro Exitoso",
+          "Usuario registrado con éxito",
+          [{ text: "OK", onPress: () => navigation.navigate('Login') }]
+      );
+  })
+  .catch(error => {
+      Alert.alert('Error de Registro', error.message);
+  });
+};
 
   return (
     <ImageBackground source={{ uri: "https://img.freepik.com/foto-gratis/doctor-trabajo_144627-40457.jpg" }} style={{ flex: 1, width: '100%', height: '100%' }}>
@@ -97,11 +141,21 @@ const Register = ({ navigation }) => {
               />
               <TextInput
                 label="Género"
+                placeholder="M o F"
                 value={genero}
                 onChangeText={setGenero}
                 style={styles.input}
                 mode="outlined"
               />
+
+              <TextInput
+                label="Edad"
+                value={edad}
+                onChangeText={setEdad}
+                style={styles.input}
+                mode="outlined"
+              />
+
               <Button mode="contained" onPress={() => setStep(2)} style={styles.button}>
                 Siguiente
               </Button>
@@ -110,12 +164,36 @@ const Register = ({ navigation }) => {
           {step === 2 && (
             <>
               <TextInput
-                label="Fecha de nacimiento"
-                value={fechaNacimiento}
-                onChangeText={setFechaNacimiento}
-                style={styles.input}
-                mode="outlined"
-              />
+            label="Fecha de nacimiento"
+            placeholder="dd/mm/aaaa"
+            value={fechaNacimiento}
+            onChangeText={setFechaNacimiento}
+            style={styles.input}
+            mode="outlined"
+        />
+        <TextInput
+            label="Tipo de sangre"
+            value={sangre}
+            onChangeText={setSangre}
+            style={styles.input}
+            mode="outlined"
+        />
+        <TextInput
+            label="Peso"
+            placeholder="En kilogramos"
+            value={peso}
+            onChangeText={setPeso}
+            style={styles.input}
+            mode="outlined"
+        />
+        <TextInput
+            label="Altura"
+            placeholder="En centímetros"
+            value={altura}
+            onChangeText={setAltura}
+            style={styles.input}
+            mode="outlined"
+        />
               <TextInput
                 label="Email"
                 value={email}

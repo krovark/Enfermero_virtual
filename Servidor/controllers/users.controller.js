@@ -28,37 +28,38 @@ exports.getUsers = async function (req, res, next) {
 // }
 
 exports.createUser = async function (req, res, next) {
-    // Req.Body contains the form submit values.
-    console.log("llegue al controller",req.body)
+    console.log("llegue al controller", req.body);
     var User = {
-        username:req.body.username,
+        username: req.body.username,
         nombre: req.body.nombre,
         apellido: req.body.apellido,
         email: req.body.email,
         telefono: req.body.telefono,
-        password: req.body.password, 
+        password: req.body.password,
         sangreTipo: req.body.sangreTipo,
         peso: req.body.peso,
         altura: req.body.altura,
         c_emergencia: req.body.c_emergencia,
         genero: req.body.genero,
         edad: req.body.edad
-    }
+    };
+
     try {
-        // Calling the Service function with the new object from the Request Body
-        var createdUser = await UserService.createUser(User)
-        return res.status(201).json({createdUser, message: "Succesfully Created User"})
+        var createdUser = await UserService.createUser(User);
+        return res.status(201).json({ createdUser, message: "Successfully Created User" });
     } catch (e) {
-        if (e.message === 'El email ya se encuentra registrado.') {
-            // Devolver un código de estado HTTP 409 si el email ya está registrado
+        console.log(e);
+        console.error(e);
+
+        // Manejo específico del error de correo electrónico ya registrado
+        if (e.message === 'El correo electrónico ya está registrado.') {
             return res.status(409).json({ message: e.message });
         }
-        //Return an Error Response Message with Code and the Error Message.
-        console.log(e)
-        console.error(e)
-        return res.status(400).json({status: 400, message: "User Creation was Unsuccesfull"})
+
+        // Manejo general de otros errores
+        return res.status(400).json({ status: 400, message: "User Creation was Unsuccessful" });
     }
-}
+};
 
 
 
