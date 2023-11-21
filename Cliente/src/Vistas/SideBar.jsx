@@ -48,7 +48,7 @@ const CustomDrawerContent = (props) => {
         onPress={() => props.navigation.navigate('Tratamientos')}
       />
       <PaperDrawer.Item
-        icon="calendar_today"
+        icon="calendar"
         label="Visitas Medicas"
         onPress={() => props.navigation.navigate('VisitasMedicas')}
       />
@@ -109,7 +109,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Inicio" component={Inicio}  />
       <Drawer.Screen name="Login" component={Login}  options={{ drawerLabel: 'Iniciar Sesión' }}  />
       <Drawer.Screen name="Register" component={Register} options={{ drawerLabel: 'Registrarse' }}  />
-      <Drawer.Screen name="ResetPW" component={ResetPW} options={{ drawerLabel: 'Recuperar Contraseña' }} />
+      <Drawer.Screen name="ResetPW" component={ResetPW} options={{ drawerLabel: 'Recuperar Contraseña', drawerItemStyle: { height: 0 } }} />
     </Drawer.Navigator>
       )}
 

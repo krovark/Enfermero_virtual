@@ -34,7 +34,9 @@ var UserSchema = new mongoose.Schema({
         required: false,
         validate: [validateFechaNacimiento, 'Formato de fecha inválido. Use dd/mm/aaaa.']
     },
-    email: { type: String, required: true, unique: true }
+    email: { type: String, required: true, unique: true },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
 },{collection: 'user'});
 
 // Agregando el plugin para paginación

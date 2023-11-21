@@ -140,6 +140,54 @@ exports.getAllUsers = async function (req, res, next) {
     }
 }
 
+exports.forgotPassword = async function(req, res) {
+    try {
+        const email = req.body.email;
+        const token = await UserService.forgotPassword(email);
+        console.log(email);
+        res.status(200).json({ message: 'Token sent to email', token }); 
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+    
 
-    
-    
+// exports.forgotPassword = async function(req, res) {
+//     try {
+//         const email = req.body.email;
+//         const response = await UserService.forgotPassword(email);
+//         res.status(200).json(response); // Envía el token como parte de la respuesta
+//     } catch (error) {
+//         res.status(400).json({ message: error.message });
+//     }
+// };
+
+
+// exports.verifyAndUpdate = async function(req, res) {
+//     try {
+//         const { resetPasswordToken, password } = req.body;
+//         console.log('Token:', resetPasswordToken, 'Nueva Contraseña:', password);
+
+//         const user = await UserService.verifyAndUpdate(resetPasswordToken, password);
+
+//         res.status(200).json({ message: 'Contraseña actualizada con éxito' });
+//     } catch (e) {
+//         console.error('Error en verifyAndUpdate:', e);
+//         res.status(500).json({ message: e.message });
+//     }
+// };
+
+exports.verifyAndUpdate = async function(req, res) {
+    try {
+        const { resetPasswordToken, password } = req.body;
+        console.log('Token:', resetPasswordToken, 'Nueva Contraseña:', password);
+
+        // Asegúrate de que los nombres de los argumentos coincidan con los esperados por el servicio
+        const user = await UserService.verifyAndUpdate(resetPasswordToken, password);
+
+        res.status(200).json({ message: 'Contraseña actualizada con éxito' });
+    } catch (e) {
+        console.error('Error en verifyAndUpdate:', e);
+        res.status(500).json({ message: e.message });
+    }
+};

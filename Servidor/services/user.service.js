@@ -2,6 +2,11 @@
 var User = require('../models/User.model');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 
 // Saving the context of this module inside the _the variable
 _this = this
@@ -139,3 +144,134 @@ exports.getAllUsers = async function () {
         throw Error('Error al obtener todos los usuarios');
     }
 }
+
+
+
+exports.forgotPassword = async function(email) {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+        throw new Error('No existe una cuenta con ese email.');
+    }
+
+    // Crear un token único
+    const token = crypto.randomBytes(10).toString('hex');
+
+    // Establecer token y su expiración en el usuario
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 7200000; // 2 horas
+    console.log(email);
+    console.log(token);
+    console.log('Fecha actual:', new Date().toISOString());
+    console.log('Fecha de expiración:', new Date(user.resetPasswordExpires).toISOString());
+    await user.save();
+    console.log(process.env.SENDGRID_API_KEY);
+    // Enviar email con el token
+
+    const msg = {
+        to: email,
+        from: 'santiagojgonzalez@uade.edu.ar',
+        subject: 'Password Reset',
+        text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+               Please use the following token for password reset: ${token}\n\n
+               If you did not request this, please ignore this email and your password will remain unchanged.\n`
+    };
+
+    //await sgMail.send(msg);
+
+    sgMail
+  .send(msg)
+  .then(() => {
+    console.log('Email sent')
+  })
+  .catch((error) => {
+    console.error(error)
+    
+  })
+
+
+    return {token} ; 
+};
+
+
+// exports.forgotPassword = async function(email) {
+//     try {
+//         const user = await User.findOne({ email: email });
+//         if (!user) {
+//             throw new Error('No existe una cuenta con ese email.');
+//         }
+
+//         const token = crypto.randomBytes(4).toString('hex');
+//         user.resetPasswordToken = token;
+//         user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+//         await user.save();
+
+//         return { token };  // Envía el token como respuesta
+//     } catch (error) {
+//         throw error;
+//     }
+// };
+
+
+// exports.forgotPassword = async function(email) {
+//     try {
+//         const user = await User.findOne({ email: email });
+//         if (!user) {
+//             throw new Error('No existe una cuenta con ese email.');
+//         }
+
+//         // Crear un token único
+//         const token = crypto.randomBytes(10).toString('hex');
+
+//         // Establecer token y su expiración en el usuario
+//         user.resetPasswordToken = token;
+//         user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+//         await user.save();
+//         console.log(email);
+//         console.log(token);
+//         console.log(process.env.SENDGRID_API_KEY);
+//         // Preparar el mensaje de correo electrónico
+//         const msg = {
+//             to: email,
+//             from: 'santiagojgonzalez@uade.edu.ar', // Reemplaza con tu dirección de correo verificada en SendGrid
+//             subject: 'Password Reset',
+//             text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+//                    Please use the following token for password reset: ${token}\n\n
+//                    If you did not request this, please ignore this email and your password will remain unchanged.\n`
+//         };
+
+//         // Enviar el correo electrónico
+//         await sgMail.send(msg);
+
+//         return token;
+//     } catch (error) {
+//         console.error('Error en forgotPassword:', error);
+//         throw error; // Propagar el error para que pueda ser manejado por el llamador
+//     }
+// };
+
+exports.verifyAndUpdate = async function(resetPasswordToken, password) {
+    try {
+        // Primero, buscar usuario por token
+        const user = await User.findOne({ resetPasswordToken: resetPasswordToken });
+
+        // Luego, verificar si el usuario existe y si el token no ha expirado
+        if (!user || user.resetPasswordExpires < Date.now()) {
+            throw new Error('Token inválido o expirado');
+        }
+
+        // Actualizar contraseña
+        console.log('Nueva contraseña:', password);
+        console.log('Token recibido:', resetPasswordToken);
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+        await user.save();
+
+        return user;
+    } catch (e) {
+        throw new Error('Error al verificar y actualizar: ' + e.message);
+        console.error(e);
+    }
+};
