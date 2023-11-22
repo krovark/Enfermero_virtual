@@ -88,20 +88,6 @@ exports.removeUser = async function (req, res, next) {
     }
 }
 
-// Iniciar sesión
-// exports.loginUser = async function (req, res, next) {
-//     var userCredentials = req.body;
-
-//     try {
-//         var loginUser = await UserService.loginUser(userCredentials);
-//         if (!loginUser) {
-//             return res.status(400).json({ message: "Error en las credenciales" });
-//         }
-//         return res.status(200).json({ loginUser, message: "Inicio de sesión exitoso" });
-//     } catch (e) {
-//         return res.status(400).json({ status: 400, message: "Error al iniciar sesión" });
-//     }
-// }
 
 exports.loginUser = async function (req, res, next) {
     // Req.Body contains the form submit values.

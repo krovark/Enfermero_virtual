@@ -58,7 +58,7 @@ return (
         </Card>
         )}  />
         <View>
-        <Button onPress={() => navigation.navigate('VisitasMedicas')}> Agregar Visita Medica </Button>
+        <Button onPress={() => navigation.navigate('RegistroVisita')}> Agregar Visita Medica </Button>
         </View>
       </View>
     );

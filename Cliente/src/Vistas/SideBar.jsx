@@ -14,6 +14,7 @@ import Register from '../Vistas/LoginRegister/Register.jsx';
 import ResetPW from './LoginRegister/ResetPW.jsx';
 import ListaTratamientos from './Tratamientos.jsx';
 import ListaVisitaMedica from './VisitaMedica.jsx';
+import RegistroVisita from './RegistrarTratamientos/RVisitaMedica.jsx'
 import { AuthProvider, useAuth } from '../utils/AuthContext.js';
 import { CommonActions } from '@react-navigation/native';
 
@@ -50,7 +51,7 @@ const CustomDrawerContent = (props) => {
       <PaperDrawer.Item
         icon="calendar"
         label="Visitas Medicas"
-        onPress={() => props.navigation.navigate('VisitaMedica')}
+        onPress={() => props.navigation.navigate('ListaVisitaMedica')}
       />
       <PaperDrawer.Item
         icon="account"
@@ -100,7 +101,8 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Chat" component={Chat}  />
       <Drawer.Screen name="Tratamientos" component={ListaTratamientos}  />
       <Drawer.Screen name="Historial" component={Historial}  />
-      <Drawer.Screen name="VisitasMedicas" component={ListaVisitaMedica}  />
+      <Drawer.Screen name="ListaVisitaMedica" component={ListaVisitaMedica}  />
+      <Drawer.Screen name="RegistroVisita" component={RegistroVisita} options={{ drawerLabel: 'Registrar Visita', drawerItemStyle: { height: 0 } }} />
         </Drawer.Navigator>
       ) : (
 
