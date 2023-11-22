@@ -6,14 +6,15 @@ import { Drawer as PaperDrawer, Searchbar, IconButton } from 'react-native-paper
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../Vistas/Home';
 import Perfil from '../Vistas/Perfil';
-import Tratamientos from '../Vistas/RegistrarTratamientos/RTratamiento';
 import Historial from '../Vistas/Historial';
 import Chat from '../Vistas/Chat';
 import Inicio from '../Vistas/LoginRegister/Inicio.jsx';
 import Login from '../Vistas/LoginRegister/Login.jsx';
 import Register from '../Vistas/LoginRegister/Register.jsx';
-import VisitasMedicas from './RegistrarTratamientos/RVisitaMedica.jsx';
 import ResetPW from './LoginRegister/ResetPW.jsx';
+import ListaTratamientos from './Tratamientos.jsx';
+import ListaVisitaMedica from './VisitaMedica.jsx';
+import RegistroVisita from './RegistrarTratamientos/RVisitaMedica.jsx'
 import { AuthProvider, useAuth } from '../utils/AuthContext.js';
 import { CommonActions } from '@react-navigation/native';
 
@@ -50,7 +51,7 @@ const CustomDrawerContent = (props) => {
       <PaperDrawer.Item
         icon="calendar"
         label="Visitas Medicas"
-        onPress={() => props.navigation.navigate('VisitasMedicas')}
+        onPress={() => props.navigation.navigate('ListaVisitaMedica')}
       />
       <PaperDrawer.Item
         icon="account"
@@ -98,9 +99,10 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Home" component={HomeScreen}  />
       <Drawer.Screen name="Perfil" component={Perfil}  />
       <Drawer.Screen name="Chat" component={Chat}  />
-      <Drawer.Screen name="Tratamientos" component={Tratamientos}  />
+      <Drawer.Screen name="Tratamientos" component={ListaTratamientos}  />
       <Drawer.Screen name="Historial" component={Historial}  />
-      <Drawer.Screen name="VisitasMedicas" component={VisitasMedicas}  />
+      <Drawer.Screen name="ListaVisitaMedica" component={ListaVisitaMedica}  />
+      <Drawer.Screen name="RegistroVisita" component={RegistroVisita} options={{ drawerLabel: 'Registrar Visita', drawerItemStyle: { height: 0 } }} />
         </Drawer.Navigator>
       ) : (
 
