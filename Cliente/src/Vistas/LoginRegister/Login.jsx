@@ -62,7 +62,7 @@ const Login = ({ navigation }) => {
       });
   }; */
 
-  fetch('http://192.168.0.103:4000/api/users/login', {
+  fetch('http://192.168.0.3:4000/api/users/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -73,6 +73,7 @@ const Login = ({ navigation }) => {
     const data = await response.json();
     if (data && data.loginUser && data.loginUser.token) {
       await AsyncStorage.setItem('userToken', data.loginUser.token);
+      await AsyncStorage.setItem('userId', data.loginUser.user._id);
       Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión');
       login({ email });
       navigation.navigate('Home');

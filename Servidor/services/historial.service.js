@@ -11,6 +11,7 @@ exports.getHistorial = async function (idUser, page, limit) {
         };
         console.log({ _idUser: idUserObjectId } );
         var historial = await Historial.paginate( { _idUser: idUserObjectId } , options);
+        console.log(historial)
         return historial;
     } catch (e) {
         console.error("Error en el servicio", e);

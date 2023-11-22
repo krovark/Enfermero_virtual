@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
   });
 router.post('/registration', TratamientoController.createTratamiento)
 router.get('/tratamiento',Authorization, TratamientoController.getTratamiento)
-router.get('/alltratamiento', TratamientoController.getAllTratamiento)
+router.get('/alltratamiento',Authorization, TratamientoController.getAllTratamiento)
 router.put('/:id/update', Authorization, TratamientoController.updateTratamiento)
 router.delete('/:id/delete', Authorization, TratamientoController.removeTratamiento)
 

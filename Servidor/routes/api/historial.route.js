@@ -12,7 +12,7 @@ router.get('/', function (req, res, next) {
 router.post('/create', Authorization, HistorialController.createHistorial);
 
 // Get historial by user ID
-router.get('/:idUser', HistorialController.getHistorial);
+router.get('/:idUser',  Authorization,HistorialController.getHistorial);
 
 // Delete historial by user ID
 router.delete('/:idUser/delete', Authorization, HistorialController.removeHistorial);
