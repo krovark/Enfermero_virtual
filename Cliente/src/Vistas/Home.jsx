@@ -1,17 +1,36 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, FlatList,ImageBackground, Alert } from 'react-native';
-import { Icon } from 'react-native-elements';
-import { IconButton} from 'react-native-paper';
+import { View, Text, StyleSheet, FlatList,ImageBackground, Alert,ScrollView } from 'react-native';
+import { IconButton, Card} from 'react-native-paper';
+
 
 const HomeScreen = () => {
   const [selected, setSelected] = useState('');
+
+  const container= {
+    flexGrow: 1,
+    padding: 35,
+  };
+
+  const inner= {
+    flex: 1,
+    padding: 30,
+    backgroundColor: '#dcdcdc',
+    justifyContent: "space-between",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    borderWidth: 5,
+    borderBlockColor: '#663399',
+    gap: 5,
+  };
+
 
   const tittleStyle={
     fontSize: 32,
     fontWeight: 'bold',
     textAlign:'center',
     color: 'white',
-    paddingHorizontal: 10,
   };
   
   const subtittleStyle={
@@ -19,7 +38,6 @@ const HomeScreen = () => {
     fontWeight: 'bold',
     textAlign:'left',
     color: 'black',
-    paddingHorizontal: 10,
   };
 
   const tratamientos = [
@@ -48,53 +66,43 @@ const HomeScreen = () => {
       source={{ uri: 'https://img.freepik.com/foto-gratis/vista-frontal-concepto-mala-costumbre_23-2148540815.jpg' }}
       style={styles.backgroundImage}
     > 
+    <View
+    style={container}
+    >
+    <View style={inner}>
       <View style={{textAlign: 'center', backgroundColor: 'rgba(0,0,0,0.6)'}}>
         <Text style={tittleStyle}>SeguiMed</Text>
       </View>
-  
-      <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop:210 }}>
-        <View style={{ width: '80%', backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: 10, padding: 5, marginBottom: 5 }}>
-          <Text style={subtittleStyle}>Tratamientos</Text>
+        <Card>
+        <Card.Title title="Tratamientos" />
+        <Card.Content>
           <FlatList
             data={tratamientos}
             keyExtractor={item => item.id}
             renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}          {item.tiempo}</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
           />
-        </View>
+        </Card.Content>
+        </Card>
   
-        <View style={{ width: '80%', backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: 10, padding: 5, marginBottom: 5 }}>
-          <Text style={subtittleStyle}>Turnos Médicos</Text>
+        <Card>
+        <Card.Title title="Turnos Medicos" />
+        <Card.Content>
           <FlatList
             data={turnosMedicos}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}             {item.fecha}</Text>}
+            renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}          {item.tiempo}</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
           />
-        </View>
+        </Card.Content>
+        </Card>
       </View>
-  
-      <View style={{flex: 1, justifyContent: 'flex-end'}}>
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <IconButton
-            icon={(props) => <Icon {...props} name="phone" color="red" size={45}/>}
-            size={50}
-            color="white"
-            onPress={() =>  Alert.alert('Desea llamar a su numero de emergencia?')}
-          />
-          <Text style={{color: 'black', fontSize: 20, marginBottom: 5}}>SOS</Text>
-        </View>
-      </View>
+    </View>
     </ImageBackground>
   );
   };
   
   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
     backgroundImage: {
       flex: 1,
       resizeMode: 'cover',
