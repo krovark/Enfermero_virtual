@@ -4,61 +4,22 @@ const mongoose = require('mongoose');
 const schedule = require('node-schedule');
 
 
-function programarRecurrencia(tratamiento) {
-    const { recurrencia, duracion, fechaInicio, idPersona } = tratamiento;
-    const duracionInt = parseInt(duracion, 10);
-    if (recurrencia === 'diaria' || recurrencia === 'semanal') {
-        programarNotificacionesPorRecurrencia(tratamiento, fechaInicio, recurrencia === 'diaria' ? 1 : 7, duracionInt, idPersona);
-    }
-}
-
-function programarNotificacionesPorRecurrencia(tratamiento, fechaInicio, incremento, duracion, idPersona) {
-    for (let i = 1; i <= duracion; i++) {
-        let fechaNotificacion = new Date(fechaInicio);
-        fechaNotificacion.setDate(fechaNotificacion.getDate() + i * incremento);
-
-        programarNotificacion(tratamiento, fechaNotificacion, idPersona);
-    }
-}
-
-async function programarNotificacion(tratamiento, fechaNotificacion, idPersona) {
-    try {
-        await guardarAlarma(tratamiento._id, fechaNotificacion, idPersona);
-    } catch (error) {
-        console.error(`Error al programar la notificación: ${error}`);
-    }
-}
-
-async function guardarAlarma(tratamientoId, fechaNotificacion, idPersona) {
-
-    try {
-        const nuevaAlarma = new Alarma({
-            tratamientoId,
-            fechaNotificacion,
-            idPersona,
-        });
-
-
-        await nuevaAlarma.save();
-    } catch (error) {
-        console.error(`Error al guardar la alarma: ${error}`);
-    }
-}
-
-
 
 
 exports.createTratamiento = async (tratamientoData) => {
+    tratamientoData.idPersona = mongoose.Types.ObjectId(tratamientoData.idPersona);
     try {
         const nuevoTratamiento = new Tratamiento(tratamientoData);
         const resultado = await nuevoTratamiento.save();
-        programarRecurrencia(resultado);
-
+        console.log(resultado);
         return resultado;
     } catch (error) {
-        throw new Error("Error al crear el tratamiento");
+        console.error("Error al crear el tratamiento1:", error);
+        throw new Error(`Error al crear el tratamiento1: ${error.message}`);
     }
 };
+
+
 
 exports.getTratamiento = async (idPersona, idTratamiento) => {
     try {

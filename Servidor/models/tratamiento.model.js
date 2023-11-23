@@ -8,6 +8,7 @@ const tratamientoSchema = new mongoose.Schema({
     dosis: { type: String, required: true },
     recurrencia: { type: String, required: true },
     duracion: { type: Number, required: true },
+    notas: { type: String, required: false },
     fechaInicio: { type: Date, required: true },
     hastaCuando: { type: Date },
 });
