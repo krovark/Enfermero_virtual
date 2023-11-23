@@ -4,11 +4,12 @@ _this = this;
 
 // Obtener lista de tratamiento
 exports.getTratamiento = async function (req, res, next) {
+    var idUser = req.params.idUser;
     var page = req.query.page ? req.query.page : 1;
     var limit = req.query.limit ? req.query.limit : 10;
 
     try {
-        var Tratamiento = await TratamientoService.getTratamiento({}, page, limit);
+        var Tratamiento = await TratamientoService.getTratamiento(idUser, page, limit);
         return res.status(200).json({ status: 200, data: Tratamiento, message: "Tratamiento obtenido exitosamente" });
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
@@ -54,10 +55,21 @@ exports.removeTratamiento = async function (req, res, next) {
 
 // Obtener todos los tratamientos
 exports.getAllTratamiento = async function (req, res, next) {
+    
+    var idUser = req.params.idPersona;
+
+    if (!idUser) {
+        return res.status(400).json({ status: 400, message: "ID de usuario no proporcionado" });
+    }
+
+    var page = req.query.page || 1;
+    var limit = req.query.limit || 10;
+
     try {
-        var allTratamiento = await TratamientoService.getAllTratamiento();
+        var allTratamiento = await TratamientoService.getAllTratamiento(idUser, page, limit);
         return res.status(200).json({ status: 200, data: allTratamiento, message: "Todos los tratamientos obtenidos exitosamente" });
     } catch (e) {
+        console.error("Error en getHistorial controller:", e);
         return res.status(400).json({ status: 400, message: e.message });
     }
 }

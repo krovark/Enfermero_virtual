@@ -3,143 +3,96 @@ import { View, Text, StyleSheet, Switch, FlatList, Pressable, SafeAreaView } fro
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { IconButton, Card, Button, Title} from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ListaTratamientos = () => {
-  const data = [{
-    id: 0,
-    time: '17:30',
-    date: '2023-10-31',
-    medicine: 'Amoxidal 500',
-    action: '1 comprimido',
-    alarmNotifData: {
-      id: 'efdfoiuad120983102',
-    },
-    status: true,
-    isEnabled: true,
-  }, {
-    id: 1,
-    time: '16:30',
-    date: '2023-10-31',
-    medicine: 'Diclofenac',
-    action: '1 comprimido',
-    alarmNotifData: {
-      id: 'efdfoiuad120983102',
-    },
-    status: true,
-    isEnabled: true,
-  }, {
-    id: 2,
-    time: '14:30',
-    date: '2023-10-31',
-    medicine: 'Paracetamol',
-    action: '1 comprimido',
-    alarmNotifData: {
-      id: 'efdfoiuad120983102',
-    },
-    status: false,
-    isEnabled: true,
-  }, {
-    id: 3,
-    time: '16:30',
-    date: '2023-10-31',
-    medicine: 'Diclofenac',
-    action: '1 comprimido',
-    alarmNotifData: {
-      id: 'efdfoiuad120983102',
-    },
-    status: true,
-    isEnabled: true,
-  }, {
-    id: 4,
-    time: '14:30',
-    date: '2023-10-31',
-    medicine: 'Paracetamol',
-    action: '1 comprimido',
-    alarmNotifData: {
-      id: 'efdfoiuad120983102',
-    },
-    status: false,
-    isEnabled: true,
-  }, {
-    id: 5,
-    time: '16:30',
-    date: '2023-10-31',
-    medicine: 'Diclofenac',
-    action: '1 comprimido',
-    alarmNotifData: {
-      id: 'efdfoiuad120983102',
-    },
-    status: true,
-    isEnabled: true,
-  }, {
-    id: 6,
-    time: '16:30',
-    date: '2023-10-31',
-    medicine: 'Diclofenac',
-    action: '1 comprimido',
-    alarmNotifData: {
-      id: 'efdfoiuad120983102',
-    },
-    status: true,
-    isEnabled: true,
-  }, {
-    id: 7,
-    time: '14:30',
-    date: '2023-10-31',
-    medicine: 'Paracetamol',
-    action: '1 comprimido',
-    alarmNotifData: {
-      id: 'efdfoiuad120983102',
-    },
-    status: false,
-    isEnabled: true,
-  }];
-
   const navigation = useNavigation();
-  const [isEnabled, setIsEnabled] = useState([true, false, true, true, false]);
+  const [tratamientos, setTratamientos] = useState([]);
+  const [isEnabled, setIsEnabled] = useState([]);
 
-  const toggleSwitch = (id, state) => {
-    console.log('===')
-    console.log(id)
-    console.log(state)
-    console.log(isEnabled)
-    console.log('===')
-    // isEnabled[id]=state
-    // setIsEnabled(previousState => !previousState)
-  }
+  const fetchTratamientos = async () => {
+    try {
+      // Replace with your AsyncStorage logic to get user token and ID
+      const token = await AsyncStorage.getItem('userToken');
+      const userId = await AsyncStorage.getItem('userId');
 
-return (
-      <View style={styles.container}>
-        
-        <FlatList 
-        data={data}
-        keyExtractor={(item, index) => item.id + index.toString()}
-        renderItem={({ item }) => (
-        <Card contentStyle={styles.card}>
-          <Card.Title title={item.medicine} subtitle={item.date}/>
-        <Card.Content>
-        </Card.Content>
-        <Card.Actions>
-          <Button>Borrar</Button>
-        </Card.Actions>
-        </Card>
-        )}  />
-        <View>
-        <Button onPress={() => navigation.navigate('Tratamientos')}> Agregar Tratamiento </Button>
-        </View>
+      const apiUrl = 'http://192.168.0.3:4000/api/tratamiento/' + userId;
+
+      console.log(apiUrl);
+
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'x-access-token': `${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+
+      if (response.ok) {
+        const result = await response.json();
+        setTratamientos(result.data.docs);
+        setIsEnabled(result.data.docs.map((item) => item.isEnabled));
+      } else {
+        console.error('Error al obtener tratamientos:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error al obtener tratamientos:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchTratamientos();
+  }, []);
+
+  const toggleSwitch = async (id, state) => {
+    const updatedEnabled = [...isEnabled];
+    updatedEnabled[id] = state;
+    setIsEnabled(updatedEnabled);
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={tratamientos}
+        keyExtractor={(item) => item._id.toString()} // Assuming _id is the unique identifier
+        renderItem={({ item, index }) => (
+          <Card contentStyle={styles.card}>
+            <Card.Title title={item.medicamento} subtitle={new Date(item.fechaInicio).toDateString()} />
+            <Card.Content>
+              <Text>Dosis: {item.dosis}</Text>
+              <Text>Recurrencia: {item.recurrencia}</Text>
+              <Text>Duración: {item.duracion} días</Text>
+              {item.hastaCuando && <Text>Hasta: {new Date(item.hastaCuando).toDateString()}</Text>}
+            </Card.Content>
+            <Card.Actions>
+              <Switch
+                value={isEnabled[index]}
+                onValueChange={(value) => toggleSwitch(index, value)}
+              />
+              <Button onPress={() => navigation.navigate('Tratamientos')}>
+                Borrar
+              </Button>
+            </Card.Actions>
+          </Card>
+        )}
+      />
+      <View>
+        <Button onPress={() => navigation.navigate('Tratamientos')}>
+          Agregar Tratamiento
+        </Button>
       </View>
-    );
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
   },
-
   card: {
     flex: 1,
-    justifyContent: "space-evenly",
+    justifyContent: 'space-evenly',
     borderWidth: 5,
     borderBlockColor: '#663399',
     gap: 5,
@@ -149,12 +102,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
     marginTop: 10,
   },
-  hairline: {
-    backgroundColor: '#888',
-    height: 1,
-    width: '100%',
-  },
 });
 
 export default ListaTratamientos;
-

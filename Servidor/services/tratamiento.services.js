@@ -1,82 +1,123 @@
-// Gettign the Newly created Mongoose Model we just created 
-var Tratamiento = require('../models/tratamiento.model');
-var bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
+const Tratamiento = require('../models/tratamiento.model');
+const Alarma = require('../models/alarma.model');
+const mongoose = require('mongoose');
+const schedule = require('node-schedule');
 
-// Saving the context of this module inside the _the variable
-_this = this
 
-// Async function to get the User List
-exports.getTratamiento = async function (query, page, limit) {
-
-    // Options setup for the mongoose paginate
-    var options = {
-        page,
-        limit
-    }
-    // Try Catch the awaited promise to handle the error 
-    try {
-        console.log("Query",query)
-        var Tratamiento = await Tratamiento.paginate(query, options)
-        // Return the tratamiento list that was retured by the mongoose promise
-        return Tratamiento;
-
-    } catch (e) {
-        // return a Error message describing the reason 
-        console.log("error services",e)
-        throw Error('Error while Paginating Users');
+function programarRecurrencia(tratamiento) {
+    const { recurrencia, duracion, fechaInicio, idPersona } = tratamiento;
+    const duracionInt = parseInt(duracion, 10);
+    if (recurrencia === 'diaria' || recurrencia === 'semanal') {
+        programarNotificacionesPorRecurrencia(tratamiento, fechaInicio, recurrencia === 'diaria' ? 1 : 7, duracionInt, idPersona);
     }
 }
 
-exports.createTratamiento = async function (tratamiento){
+function programarNotificacionesPorRecurrencia(tratamiento, fechaInicio, incremento, duracion, idPersona) {
+    for (let i = 1; i <= duracion; i++) {
+        let fechaNotificacion = new Date(fechaInicio);
+        fechaNotificacion.setDate(fechaNotificacion.getDate() + i * incremento);
 
-    var newTratamiento = new Tratamiento({
-        tratamiento: tratamiento.tratamiento,
-        horario: tratamiento.horario,
-        notas: tratamiento.notas,
-        alarma: tratamiento.alarma,
-        frecuencia: tratamiento.frecuencia,
-    });
-
-    try {
-        var savedTratamiento = await newTratamiento.save();
-        var token = jwt.sign({ id: savedTratamiento._id }, process.env.SECRET, { expiresIn: 86400});
-        return token;
-    } catch (e) {
-        throw Error("Error al crear Tratamiento");
+        programarNotificacion(tratamiento, fechaNotificacion, idPersona);
     }
 }
 
-exports.updateTratamiento = async function (tratamientoId, tratamientoData){
-    try{
-        var updatedTratamiento = await Tratamiento.findByIdAndUpdate(tratamientoId, tratamientoData, { new:true });
-        return updatedTratamiento;
-    } catch (e) {
-        throw Error("Error al actualizar los tratamientos");
+async function programarNotificacion(tratamiento, fechaNotificacion, idPersona) {
+    try {
+        await guardarAlarma(tratamiento._id, fechaNotificacion, idPersona);
+    } catch (error) {
+        console.error(`Error al programar la notificación: ${error}`);
     }
 }
 
-exports.deleteTratamiento = async function (id) {
-    console.log(id)
-    // Delete the tratamientos
+async function guardarAlarma(tratamientoId, fechaNotificacion, idPersona) {
+
     try {
-        var deleted = await Tratamiento.remove({
-            _id: id
-        })
-        if (deleted.n === 0 && deleted.ok === 1) {
-            throw Error("Tratamiento Could not be deleted")
-        }
-        return deleted;
-    } catch (e) {
-        throw Error("Error Occured while Deleting the Tratamiento")
+        const nuevaAlarma = new Alarma({
+            tratamientoId,
+            fechaNotificacion,
+            idPersona,
+        });
+
+
+        await nuevaAlarma.save();
+    } catch (error) {
+        console.error(`Error al guardar la alarma: ${error}`);
     }
 }
 
-exports.getAllTratamiento = async function () {
+
+
+
+exports.createTratamiento = async (tratamientoData) => {
     try {
-        var tratamiento = await Tratamiento.find({});
+        const nuevoTratamiento = new Tratamiento(tratamientoData);
+        const resultado = await nuevoTratamiento.save();
+        programarRecurrencia(resultado);
+
+        return resultado;
+    } catch (error) {
+        throw new Error("Error al crear el tratamiento");
+    }
+};
+
+exports.getTratamiento = async (idPersona, idTratamiento) => {
+    try {
+        const tratamiento = await Tratamiento.findOne({ idPersona, _id: idTratamiento });
+        return tratamiento;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Error al obtener el tratamiento");
+    }
+};
+
+// exports.getAllTratamiento = async (idPersona) => {
+//     try {
+//         const tratamiento = await Tratamiento.find({ idPersona: idPersona });
+//         return tratamiento;
+//     } catch (error) {
+//         console.error(error);
+//         throw new Error("Error al obtener el tratamiento");
+//     }
+// };
+
+exports.getAllTratamiento = async function (idUser, page, limit) {
+    try {
+
+        var idUserObjectId = mongoose.Types.ObjectId(idUser);
+
+        var options = {
+            page,
+            limit
+        };
+        var tratamiento = await Tratamiento.paginate( { idPersona: idUserObjectId } , options);
         return tratamiento;
     } catch (e) {
-        throw Error('Error al obtener todos los tratamientos');
+        console.error("Error en el servicio", e);
+        throw Error('Error while Paginating tratamiento');
     }
-}
+};
+
+
+exports.updateTratamiento = async (idPersona, idTratamiento, tratamientoData) => {
+    try {
+        const resultado = await Tratamiento.findOneAndUpdate(
+            { idPersona, _id: idTratamiento },
+            tratamientoData,
+            { new: true }
+        );
+        return resultado;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Error al actualizar el tratamiento");
+    }
+};
+
+exports.removeTratamiento = async (idPersona, idTratamiento) => {
+    try {
+        await Tratamiento.findOneAndRemove({ idPersona, _id: idTratamiento });
+        return { mensaje: 'Tratamiento eliminado exitosamente' };
+    } catch (error) {
+        console.error(error);
+        throw new Error("Error al eliminar el tratamiento");
+    }
+};

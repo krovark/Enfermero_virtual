@@ -1,19 +1,19 @@
-var mongoose = require('mongoose');
-var mongoosePaginate = require('mongoose-paginate');
-var uniqueValidator = require('mongoose-unique-validator');
+const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 
-var tratamientoSchema = new mongoose.Schema({
-    tratamieto: {type: String, required: true},
-    horario: { type: String, required: true},
-    notas: {type: String, required: true},
-    alarma: { type: Boolean, required: true },
-    frecuencia: {type: String, required: true},
+const tratamientoSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    idPersona: { type: mongoose.Schema.Types.ObjectId, ref: 'Persona', required: true },
+    medicamento: { type: String, required: true },
+    dosis: { type: String, required: true },
+    recurrencia: { type: String, required: true },
+    duracion: { type: Number, required: true },
+    fechaInicio: { type: Date, required: true },
+    hastaCuando: { type: Date },
 });
 
-// Agregando el plugin para paginación
 tratamientoSchema.plugin(mongoosePaginate);
-tratamientoSchema.plugin(uniqueValidator, { message: '{PATH} ya registrado' });
 
-// Creando y exportando el modelo
 const Tratamiento = mongoose.model('Tratamiento', tratamientoSchema);
+
 module.exports = Tratamiento;
