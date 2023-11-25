@@ -56,7 +56,9 @@ exports.createUser = async function (user) {
             sangreTipo: user.sangreTipo,
             peso: user.peso,
             altura: user.altura,
-            c_emergencia: user.c_emergencia,   
+            c_emergencia: user.c_emergencia,
+            resetPasswordToken: user.resetPasswordToken,
+            resetPasswordExpires: user.resetPasswordExpires,   
         },
     });
 

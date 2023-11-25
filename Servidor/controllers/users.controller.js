@@ -41,7 +41,9 @@ exports.createUser = async function (req, res, next) {
         altura: req.body.altura,
         c_emergencia: req.body.c_emergencia,
         genero: req.body.genero,
-        edad: req.body.edad
+        edad: req.body.edad,
+        resetPasswordToken: req.body.resetPasswordToken,
+        resetPasswordExpires: req.body.resetPasswordExpires,
     };
 
     try {
