@@ -49,12 +49,12 @@ const Perfil = () => {
                 console.log("Data de la API:", data);
                 
                     setName(data.data.perfil.nombre + " " + data.data.perfil.apellido);
-                    setEdad(data.data.perfil.edad.toString());
-                    setPhone(data.data.perfil.telefono);
-                    setBloodType(data.data.perfil.sangreTipo);
-                    setPeso(data.data.perfil.peso.toString());
-                    setAltura(data.data.perfil.altura.toString());
-                    setEmergencyContact(data.data.perfil.c_emergencia);
+                    setEdad(data.data.perfil.edad?.toString() || '');
+                    setPhone(data.data.perfil.telefono || '');
+                    setBloodType(data.data.perfil.sangreTipo || '');
+                    setPeso(data.data.perfil.peso?.toString() || '');
+                    setAltura(data.data.perfil.altura?.toString() || '');
+                    setEmergencyContact(data.data.perfil.c_emergencia || '');
                     
                 
             } catch (error) {
@@ -113,30 +113,34 @@ const Perfil = () => {
         try {
             const token = await AsyncStorage.getItem('userToken');
             const userId = await AsyncStorage.getItem('userId'); // Asumiendo que guardas el ID del usuario
-    
+            
+            const perfilToUpdate = {
+                telefono: phone,
+                sangreTipo: bloodType,
+                peso: parseFloat(peso), // Convierte el peso a un número
+                altura: parseInt(altura, 10), // Convierte la altura a un entero
+                c_emergencia: emergencyContact
+            };
+
+
             const response = await fetch(`${API_URL}/users/${userId}/update`, { 
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'x-access-token': token
                 },
-                body: JSON.stringify({
-                    perfil: { 
-                        telefono: phone,
-                        sangreTipo: bloodType,
-                        peso: peso,
-                        altura: altura,
-                        c_emergencia: emergencyContact
-                    }
-                })
+                body: JSON.stringify({ perfil: perfilToUpdate })
             });
     
-            const data = await response.json();
+            
             if (response.ok) {
+                const data = await response.json();
                 Alert.alert('Éxito', 'Perfil actualizado correctamente');
                 
             } else {
-                Alert.alert('Error', data.message || 'Error al actualizar el perfil');
+                const errorData = await response.text();
+                console.error('Error en la respuesta del servidor:', errorData);
+                Alert.alert('Error', errorData || 'Error al actualizar el perfil');
             }
         } catch (error) {
             console.error('Error al actualizar el perfil:', error);

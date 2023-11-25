@@ -103,15 +103,37 @@ exports.createUser = async function (user) {
 // }
 
 
+// exports.updateUser = async function (userId, userData) {
+//     try {
+//         var updatedUser = await User.findByIdAndUpdate(userId, userData, { new: true });
+//         return updatedUser;
+//     } catch (e) {
+//         throw Error("Error al actualizar el usuario");
+//     }
+// }
+
 exports.updateUser = async function (userId, userData) {
     try {
-        var updatedUser = await User.findByIdAndUpdate(userId, userData, { new: true });
+        const updateData = {};
+
+        // Construir dinámicamente el objeto de actualización
+        if (userData.perfil) {
+            for (const key in userData.perfil) {
+                updateData[`perfil.${key}`] = userData.perfil[key];
+            }
+        }
+
+        var updatedUser = await User.findByIdAndUpdate(
+            userId, 
+            { $set: updateData }, // Utiliza $set para actualizar solo los campos específicos
+            { new: true }
+        );
+
         return updatedUser;
     } catch (e) {
         throw Error("Error al actualizar el usuario");
     }
 }
-
 
 exports.deleteUser = async function (id) {
     console.log(id)
