@@ -82,7 +82,9 @@ const Register = ({ navigation }) => {
         altura,
         peso,
         sangre,
-        edad
+        edad,
+        resetPasswordToken,
+        resetPasswordExpires
     };
 
     // Envía la solicitud al backend

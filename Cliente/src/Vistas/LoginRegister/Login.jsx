@@ -62,7 +62,7 @@ const Login = ({ navigation }) => {
       });
   }; */
 
-  fetch('http://192.168.0.3:4000/api/users/login', {
+  fetch('http://192.168.0.103:4000/api/users/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
