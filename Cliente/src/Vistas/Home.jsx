@@ -1,113 +1,99 @@
-import React, {useState} from 'react';
-import { View, Text, StyleSheet, FlatList,ImageBackground, Alert,ScrollView } from 'react-native';
-import { IconButton, Card} from 'react-native-paper';
+import React from 'react';
+import { View, Text, StyleSheet, FlatList, ImageBackground  } from 'react-native';
+import { Card } from 'react-native-paper';
+
+
+
 
 
 const HomeScreen = () => {
-  const [selected, setSelected] = useState('');
-
-  const container= {
-    flexGrow: 1,
-    padding: 35,
-  };
-
-  const inner= {
-    flex: 1,
-    padding: 30,
-    backgroundColor: '#dcdcdc',
-    justifyContent: "space-between",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    borderWidth: 5,
-    borderBlockColor: '#663399',
-    gap: 5,
-  };
-
-
-  const tittleStyle={
-    fontSize: 32,
-    fontWeight: 'bold',
-    textAlign:'center',
-    color: 'white',
-  };
-  
-  const subtittleStyle={
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign:'left',
-    color: 'black',
-  };
-
   const tratamientos = [
-    {
-      id:'001',
-      nombre:'Tratamiento 1',
-      tiempo:'24 min',
-    },
-    
+    { id: '001', nombre: 'Tratamiento 1', tiempo: '24 min' },
+    { id: '002', nombre: 'Tratamiento 2', tiempo: '57 min' },
+  ];
 
-    {
-      id:'002',
-      nombre:'Tratamiento 2',
-      tiempo:'57 min',
-    },
-  ]
-   
-   const turnosMedicos = [
-    { id: '001', nombre: 'Turno 1', fecha:'12/12/2023' },
-    { id: '002', nombre: 'Turno 2', fecha:'08/05/2024' },
-   ];
+  const turnosMedicos = [
+    { id: '003', nombre: 'Turno 1', fecha: '12/12/2023' },
+    { id: '004', nombre: 'Turno 2', fecha: '08/05/2024' },
+  ];
 
+  const data = [
+    { id: 'header1', type: 'header', title: 'Tratamientos' },
+    ...tratamientos.map(item => ({ ...item, type: 'tratamiento' })),
+    { id: 'header2', type: 'header', title: 'Turnos Médicos' },
+    ...turnosMedicos.map(item => ({ ...item, type: 'turnoMedico' })),
+  ];
 
-   return (
-    <ImageBackground
-      source={{ uri: 'https://img.freepik.com/foto-gratis/vista-frontal-concepto-mala-costumbre_23-2148540815.jpg' }}
-      style={styles.backgroundImage}
-    > 
-    <View
-    style={container}
-    >
-    <View style={inner}>
-      <View style={{textAlign: 'center', backgroundColor: 'rgba(0,0,0,0.6)'}}>
-        <Text style={tittleStyle}>SeguiMed</Text>
+  const renderItem = ({ item }) => {
+    if (item.type === 'header') {
+      return <Text style={styles.header}>{item.title}</Text>;
+    }
+    return (
+      
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>{item.nombre}</Text>
+        <Text style={styles.cardSubtitle}>{item.tiempo || item.fecha}</Text>
       </View>
-        <Card>
-        <Card.Title title="Tratamientos" />
-        <Card.Content>
-          <FlatList
-            data={tratamientos}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}          {item.tiempo}</Text>}
-            ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
-          />
-        </Card.Content>
-        </Card>
+     
+    );
+  };
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 20,
+      // backgroundColor: 'white',
+    },
+
+    backgroundImage: {
+      flex: 1,
+      resizeMode: 'cover', // O 'stretch'
+    },
   
-        <Card>
-        <Card.Title title="Turnos Medicos" />
-        <Card.Content>
-          <FlatList
-            data={turnosMedicos}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => <Text style={{ color: 'black', marginVertical: 10, marginLeft:10, fontSize: 20 }}>{item.nombre}          {item.tiempo}</Text>}
-            ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
-          />
-        </Card.Content>
-        </Card>
-      </View>
+
+    header: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginTop: 20,
+      marginBottom: 20,
+      color: 'black',
+      
+    },
+    card: {
+      backgroundColor: 'white',
+      padding: 15,
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+      marginBottom: 15,
+    },
+    cardTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#333',
+      margin: 3,
+    },
+    cardSubtitle: {
+      fontSize: 16,
+      color: '#666',
+      marginTop: 6,
+    },
+  });
+
+  return (
+    <ImageBackground source={require('../../assets/home.png')} style={styles.backgroundImage}>
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+      />
     </View>
     </ImageBackground>
   );
-  };
-  
-  const styles = StyleSheet.create({
-    backgroundImage: {
-      flex: 1,
-      resizeMode: 'cover',
-      justifyContent: 'center',
-    },
-  });
-  
-  export default HomeScreen;
+};
+
+export default HomeScreen;
