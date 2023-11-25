@@ -16,7 +16,7 @@ const ListaTratamientos = () => {
       const token = await AsyncStorage.getItem('userToken');
       const userId = await AsyncStorage.getItem('userId');
 
-      const apiUrl = 'http://192.168.0.3:4000/api/tratamiento/' + userId;
+      const apiUrl = 'http://192.168.0.103:4000/api/tratamiento/' + userId;
 
       console.log(apiUrl);
 
@@ -77,7 +77,7 @@ const ListaTratamientos = () => {
         )}
       />
       <View>
-        <Button onPress={() => navigation.navigate('Tratamientos')}>
+        <Button onPress={() => navigation.navigate('RegistroTratamiento')}>
           Agregar Tratamiento
         </Button>
       </View>

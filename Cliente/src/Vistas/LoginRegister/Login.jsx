@@ -72,6 +72,8 @@ const Login = ({ navigation }) => {
   .then(async (response) => {
     const data = await response.json();
     if (data && data.loginUser && data.loginUser.token) {
+      console.log(data.loginUser.token);
+      
       await AsyncStorage.setItem('userToken', data.loginUser.token);
       await AsyncStorage.setItem('userId', data.loginUser.user._id);
       Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión');

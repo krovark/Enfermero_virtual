@@ -4,24 +4,72 @@ import { IconButton, Avatar, TextInput, Button, HelperText  } from 'react-native
 import ProfileImg from '../../assets/Avatar.png'
 import PhoneInput from 'react-native-phone-input';
 import * as ImagePicker from 'expo-image-picker';
+import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
 
 
 
 
 const Perfil = () => {
-    const [name, setName] = useState("Itunuoluwa Abidoye");
-    const [edad, setEdad] = useState("45");
-    const [phone, setPhone] = useState("0123456789");
+    const [name, setName] = useState("");
+    const [edad, setEdad] = useState("");
+    const [phone, setPhone] = useState("");
     const [bloodType, setBloodType] = useState("");
     const [peso, setPeso] = useState('');
     const [altura, setAltura] = useState('');
     const [emergencyContact, setEmergencyContact] = useState("");
     const [isSelected, setSelection] = useState(false);
-
-
-
     const [profileImage, setProfileImage] = useState(ProfileImg);
     const [isEditable, setIsEditable] = useState(false); // Nuevo estado
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            
+            try {
+                const token = await AsyncStorage.getItem('userToken');
+                const response = await fetch('http://192.168.0.103:4000/api/users/profile', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-access-token': token
+                    }
+                });
+                console.log("hola")
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    console.log("holaaaaaaaa")
+                    console.error('Error en la respuesta del servidor:', errorData.message);
+                    Alert.alert('Error', errorData || 'Ocurrió un error al obtener el perfil');
+                    return;
+                }
+    
+                const data = await response.json();
+                console.log("Data de la API:", data);
+                
+                    setName(data.data.perfil.nombre + " " + data.data.perfil.apellido);
+                    setEdad(data.data.perfil.edad.toString());
+                    setPhone(data.data.perfil.telefono);
+                    setBloodType(data.data.perfil.sangreTipo);
+                    setPeso(data.data.perfil.peso.toString());
+                    setAltura(data.data.perfil.altura.toString());
+                    setEmergencyContact(data.data.perfil.c_emergencia);
+                    console.log("holaaaaaaaaa")
+                
+            } catch (error) {
+                console.error('Error en la respuesta del servidor:', error);
+                Alert.alert('Error', 'Ocurrió un error al obtener el perfil');
+            }
+        };
+    
+        fetchProfile();
+    }, []);
+
+    useEffect(() => {
+        if (phoneRef.current) {
+            phoneRef.current.setValue(phone);
+        }
+    }, [phone]);
 
     const toggleEditable = () => {
         setIsEditable(!isEditable);
@@ -60,8 +108,29 @@ const Perfil = () => {
     const phoneNumber = phoneRef.current ? phoneRef.current.getValue() : "";
 
    
-    const handleUpdate = () => {
-        
+    const handleUpdate = async () => {
+        try {
+            const token = await AsyncStorage.getItem('userToken');
+            const response = await fetch('http://localhost:4000/api/profile', {
+                method: 'PATCH', // o PATCH según tu API
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': token
+                },
+                body: JSON.stringify({
+                    name, edad, phone, bloodType, peso, altura, emergencyContact
+                })
+            });
+    
+            const data = await response.json();
+            if (response.ok) {
+                // Manejar la actualización exitosa, por ejemplo, mostrar un mensaje
+            } else {
+                // Manejar errores, por ejemplo, mostrar un mensaje
+            }
+        } catch (error) {
+            console.error('Error al actualizar el perfil:', error);
+        }
         setIsEditable(false);
     };
 

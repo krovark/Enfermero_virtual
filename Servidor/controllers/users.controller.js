@@ -117,6 +117,19 @@ exports.loginUser = async function (req, res, next) {
     }
 }
 
+exports.getProfile = async function (req, res, next) {
+    try {
+        // Extraer el ID del usuario del token JWT
+        var userId = req.userId; 
+        console.log("user.controller", userId );
+        var user = await UserService.getProfile(userId);
+        return res.status(200).json({ status: 200, data: user, message: "Perfil obtenido exitosamente" });
+    } catch (e) {
+        console.error(e);
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};
+
 
 
 // Obtener todos los usuarios

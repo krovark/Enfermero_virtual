@@ -12,7 +12,7 @@ const Historial = (props) => {
             const token = await AsyncStorage.getItem('userToken');
             const userId = await AsyncStorage.getItem('userId');
 
-            const apiUrl = 'http://192.168.0.3:4000/api/historial/' + userId;
+            const apiUrl = 'http://192.168.0.103:4000/api/historial/' + userId;
 
             const response = await fetch(apiUrl, {
                 method: 'GET',

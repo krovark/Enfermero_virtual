@@ -16,6 +16,8 @@ const Register = ({ navigation }) => {
 
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [email, setEmail] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [emergencia, setEmergencia] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [edad, setEdad] = useState('');
@@ -23,7 +25,8 @@ const Register = ({ navigation }) => {
   const alturaInputRef = useRef(null);
   const pesoInputRef = useRef(null);
   const sangreInputRef = useRef(null);
-
+  const telefonoInputRef = useRef(null);
+  const emergenciaInputRef = useRef(null);
   const nombreInputRef = useRef(null);
   const apellidoInputRef = useRef(null);
   const generoInputRef = useRef(null);
@@ -39,11 +42,11 @@ const Register = ({ navigation }) => {
       setApellido('');
       setGenero('');
       setEdad('');
-
+      setEmergencia('');
       setAltura('');
       setPeso('');
       setSangre('');
-
+      setTelefono('');
       setFechaNacimiento('');
       setEmail('');
       setPassword('');
@@ -59,6 +62,8 @@ const Register = ({ navigation }) => {
       alturaInputRef.current?.clear();
       pesoInputRef.current?.clear();
       sangreInputRef.current?.clear();
+      telefonoInputRef.current?.clear();
+      emergenciaInputRef.current?.clear();
       
     });
 
@@ -82,7 +87,9 @@ const Register = ({ navigation }) => {
         altura,
         peso,
         sangre,
+        telefono,
         edad,
+        emergencia,
         resetPasswordToken,
         resetPasswordExpires
     };

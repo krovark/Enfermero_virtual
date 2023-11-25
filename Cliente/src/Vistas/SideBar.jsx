@@ -15,8 +15,10 @@ import ResetPW from './LoginRegister/ResetPW.jsx';
 import ListaTratamientos from './Tratamientos.jsx';
 import ListaVisitaMedica from './VisitaMedica.jsx';
 import RegistroVisita from './RegistrarTratamientos/RVisitaMedica.jsx'
+import RegistroTratamiento from './RegistrarTratamientos/RTratamiento.jsx'
 import { AuthProvider, useAuth } from '../utils/AuthContext.js';
 import { CommonActions } from '@react-navigation/native';
+
 
 const Drawer = createDrawerNavigator();
 
@@ -103,6 +105,8 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Historial" component={Historial}  />
       <Drawer.Screen name="ListaVisitaMedica" component={ListaVisitaMedica}  />
       <Drawer.Screen name="RegistroVisita" component={RegistroVisita} options={{ drawerLabel: 'Registrar Visita', drawerItemStyle: { height: 0 } }} />
+      <Drawer.Screen name="RegistroTratamiento" component={RegistroTratamiento} options={{ drawerLabel: 'Registrar Tratamiento', drawerItemStyle: { height: 0 } }} />
+
         </Drawer.Navigator>
       ) : (
 

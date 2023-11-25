@@ -56,6 +56,7 @@ exports.createUser = async function (user) {
             sangreTipo: user.sangreTipo,
             peso: user.peso,
             altura: user.altura,
+            telefono: user.telefono,
             c_emergencia: user.c_emergencia,
             resetPasswordToken: user.resetPasswordToken,
             resetPasswordExpires: user.resetPasswordExpires,   
@@ -196,6 +197,19 @@ exports.forgotPassword = async function(email) {
 
 
     return {token} ; 
+};
+
+
+exports.getProfile = async function (userId) {
+    try {
+        console.log("userId service", userId);
+        var user = await User.findById(userId);
+        console.log(user)
+        return user;
+    } catch (e) {
+        console.error(e);
+        throw Error("Error al obtener el usuario");
+    }
 };
 
 
