@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import validator from 'validator';
 import Swiper from 'react-native-swiper';
+import API_URL from '../../utils/fetchConfig'
 
 const ResetPW = () => {
     const [email, setEmail] = useState('');
@@ -15,7 +16,7 @@ const ResetPW = () => {
         }
     
         
-        fetch('http://192.168.0.103:4000/api/users/forgot-password', {
+        fetch(`${API_URL}/users/forgot-password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +63,9 @@ const ResetPW = () => {
 
     const handlePasswordReset = () => {
         // Llamada al backend para restablecer la contraseña
-        fetch('http://192.168.0.103:4000/api/users/reset_password', {
+
+
+        fetch( `${API_URL}/users/reset_password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

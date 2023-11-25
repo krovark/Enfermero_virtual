@@ -5,7 +5,7 @@ import validator from 'validator';
 import { useAuth } from '../../utils/AuthContext';
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import API_URL from '../../utils/fetchConfig'
 
 
 const Login = ({ navigation }) => {
@@ -41,28 +41,8 @@ const Login = ({ navigation }) => {
       return;
     }
 
-   /*  axios.post('http://192.168.68.113:4000/api/users/login', { email, password })
-      .then(async response => {
-        if (response.data && response.data.loginUser && response.data.loginUser.token) {
-          await AsyncStorage.setItem('userToken', response.data.loginUser.token);
-          Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión');
-          login({ email });
-          navigation.navigate('Home');
-        } else {
-          Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas');
-        }
-      })
-      .catch(error => {
-        if (error.response) {
-          Alert.alert('Error de inicio de sesión', error.response.data.message || 'Credenciales incorrectas');
-        } else {
-          console.error(error)
-          Alert.alert('Error de inicio de sesión', 'Error al conectarse al servidor');
-        }
-      });
-  }; */
-
-  fetch('http://192.168.0.103:4000/api/users/login', {
+    
+    fetch(`${API_URL}/users/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

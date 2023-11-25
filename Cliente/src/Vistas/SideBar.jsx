@@ -66,11 +66,11 @@ const CustomDrawerContent = (props) => {
         onPress={() => props.navigation.navigate('Historial')}
       />
       
-      <PaperDrawer.Item
+      {/* <PaperDrawer.Item
         icon="chat"
         label="Chat"
         onPress={() => props.navigation.navigate('Chat')}
-      />
+      /> */}
       <View style={styles.logoutContainer}>
     <PaperDrawer.Item
       icon="logout"
@@ -100,7 +100,7 @@ const DrawerNavigator = () => {
       <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} ref={navigationRef} />}>
       <Drawer.Screen name="Home" component={HomeScreen}  />
       <Drawer.Screen name="Perfil" component={Perfil}  />
-      <Drawer.Screen name="Chat" component={Chat}  />
+      {/* <Drawer.Screen name="Chat" component={Chat} options={{ drawerLabel: 'Recuperar Contraseña', drawerItemStyle: { height: 0 } }} /> */}
       <Drawer.Screen name="Tratamientos" component={ListaTratamientos}  />
       <Drawer.Screen name="Historial" component={Historial}  />
       <Drawer.Screen name="ListaVisitaMedica" component={ListaVisitaMedica}  />

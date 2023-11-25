@@ -4,6 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { IconButton, Card, Button, Title} from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import API_URL from '../utils/fetchConfig'
 
 const ListaTratamientos = () => {
   const navigation = useNavigation();
@@ -16,7 +17,7 @@ const ListaTratamientos = () => {
       const token = await AsyncStorage.getItem('userToken');
       const userId = await AsyncStorage.getItem('userId');
 
-      const apiUrl = 'http://192.168.0.103:4000/api/tratamiento/' + userId;
+      const apiUrl = `${API_URL}/tratamiento/` + userId;
 
       console.log(apiUrl);
 

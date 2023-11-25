@@ -7,7 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
-
+import API_URL from '../utils/fetchConfig'
 
 
 
@@ -28,17 +28,18 @@ const Perfil = () => {
             
             try {
                 const token = await AsyncStorage.getItem('userToken');
-                const response = await fetch('http://192.168.0.103:4000/api/users/profile', {
+                
+                const response = await fetch(`${API_URL}/users/profile`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'x-access-token': token
                     }
                 });
-                console.log("hola")
+                
                 if (!response.ok) {
                     const errorData = await response.text();
-                    console.log("holaaaaaaaa")
+                   
                     console.error('Error en la respuesta del servidor:', errorData.message);
                     Alert.alert('Error', errorData || 'Ocurrió un error al obtener el perfil');
                     return;
@@ -54,7 +55,7 @@ const Perfil = () => {
                     setPeso(data.data.perfil.peso.toString());
                     setAltura(data.data.perfil.altura.toString());
                     setEmergencyContact(data.data.perfil.c_emergencia);
-                    console.log("holaaaaaaaaa")
+                    
                 
             } catch (error) {
                 console.error('Error en la respuesta del servidor:', error);
@@ -111,27 +112,37 @@ const Perfil = () => {
     const handleUpdate = async () => {
         try {
             const token = await AsyncStorage.getItem('userToken');
-            const response = await fetch('http://localhost:4000/api/profile', {
-                method: 'PATCH', // o PATCH según tu API
+            const userId = await AsyncStorage.getItem('userId'); // Asumiendo que guardas el ID del usuario
+    
+            const response = await fetch(`${API_URL}/users/${userId}/update`, { 
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'x-access-token': token
                 },
                 body: JSON.stringify({
-                    name, edad, phone, bloodType, peso, altura, emergencyContact
+                    perfil: { 
+                        telefono: phone,
+                        sangreTipo: bloodType,
+                        peso: peso,
+                        altura: altura,
+                        c_emergencia: emergencyContact
+                    }
                 })
             });
     
             const data = await response.json();
             if (response.ok) {
-                // Manejar la actualización exitosa, por ejemplo, mostrar un mensaje
+                Alert.alert('Éxito', 'Perfil actualizado correctamente');
+                
             } else {
-                // Manejar errores, por ejemplo, mostrar un mensaje
+                Alert.alert('Error', data.message || 'Error al actualizar el perfil');
             }
         } catch (error) {
             console.error('Error al actualizar el perfil:', error);
+            Alert.alert('Error', 'Ocurrió un error al actualizar el perfil');
         }
-        setIsEditable(false);
+        setIsEditable(false); 
     };
 
 
@@ -325,7 +336,8 @@ const styles = StyleSheet.create({
 
     button: {
         marginTop: 20,
-        backgroundColor: '#6200EE', // Color principal para el botón
+       backgroundColor: '#6200EE', // Color principal para el botón
+       // backgroundColor: '#0097B2', // Color principal para el botón
         borderRadius: 5,
         paddingVertical: 8,
         alignItems: 'center',

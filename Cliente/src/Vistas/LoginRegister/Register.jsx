@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, ImageBackground, Alert } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { IconButton } from 'react-native-paper';
-
+import API_URL from '../../utils/fetchConfig'
 
 const Register = ({ navigation }) => {
   const [step, setStep] = useState(1);
@@ -95,7 +95,7 @@ const Register = ({ navigation }) => {
     };
 
     // Envía la solicitud al backend
-    fetch('http://192.168.0.103:4000/api/users/registration', {
+    fetch(`${API_URL}/users/registration`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

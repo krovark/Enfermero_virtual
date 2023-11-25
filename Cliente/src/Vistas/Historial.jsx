@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import API_URL from '../utils/fetchConfig'
+
 
 const Historial = (props) => {
     const [historial, setHistorial] = useState([]);
@@ -12,7 +14,7 @@ const Historial = (props) => {
             const token = await AsyncStorage.getItem('userToken');
             const userId = await AsyncStorage.getItem('userId');
 
-            const apiUrl = 'http://192.168.0.103:4000/api/historial/' + userId;
+            const apiUrl = `${API_URL}/historial/` + userId;
 
             const response = await fetch(apiUrl, {
                 method: 'GET',
