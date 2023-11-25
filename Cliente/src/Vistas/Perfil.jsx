@@ -237,7 +237,8 @@ const styles = StyleSheet.create({
     phoneInputDisabled: {
     
         marginBottom: 15,
-        backgroundColor: '#f2e8e1',  // Color de fondo blanco para el TextInput
+        backgroundColor: '#848689', // Color gris claro para el fondo
+        opacity:0.3,
         borderRadius: 5,          // bordes redondeados para el TextInput
         elevation: 2,             // sombra para darle un poco de elevación al TextInput
         paddingHorizontal: 12,
@@ -246,7 +247,8 @@ const styles = StyleSheet.create({
     },
     inputDisabled: {
     marginBottom: 15,
-    backgroundColor: '#f2e8e1', // Color gris claro para el fondo
+    backgroundColor: '#848689', // Color gris claro para el fondo
+    opacity:0.3,
     borderRadius: 5,
     elevation: 2,
     paddingHorizontal: 12,
