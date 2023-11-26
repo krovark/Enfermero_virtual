@@ -90,8 +90,7 @@ const Register = ({ navigation }) => {
         telefono,
         edad,
         emergencia,
-        resetPasswordToken,
-        resetPasswordExpires
+        
     };
 
     // Envía la solicitud al backend
