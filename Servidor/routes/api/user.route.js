@@ -18,7 +18,7 @@ router.patch('/:id/update', Authorization, UserController.updateUser)
 router.delete('/:id/delete', Authorization, UserController.removeUser)
 router.post('/forgot-password', UserController.forgotPassword);
 router.post('/reset_password', UserController.verifyAndUpdate);
-
+router.get('/visitas-medicas', UserController.getUpcomingMedicalVisits);
 // Export the Router
 module.exports = router;
 

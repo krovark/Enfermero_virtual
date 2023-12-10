@@ -2,6 +2,7 @@
 var Visitasmed = require('../models/visitasmed.model');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
+const { parseFecha } = require('../utils/moments')
 
 // Saving the context of this module inside the _the variable
 _this = this
@@ -23,21 +24,24 @@ exports.getVisitasmed = async function (query, page, limit) {
 
     } catch (e) {
         // return a Error message describing the reason 
-        console.log("error services",e)
+        console.error("error services",e)
         throw Error('Error while Paginating Users');
     }
 }
 
 exports.createVisitasmed = async function (visitasmed){
 
+    const fechaFormatoISO = moment(visitasmed.fecha, 'DD/MM/YYYY').toDate();
+
     var newVisitasmed = new Visitasmed({
         visita: visitasmed.visita,
-        fecha: visitasmed.fecha,
+        fecha: parseFecha(visitasmed.fecha),
         hora: visitasmed.hora,
         direccion: visitasmed.direccion,
     });
 
     try {
+        console.log(newVisitasmed);
         var savedVisitasmed = await newVisitasmed.save();
         var token = jwt.sign({ id: savedVisitasmed._id }, process.env.SECRET, { expiresIn: 86400});
         return token;

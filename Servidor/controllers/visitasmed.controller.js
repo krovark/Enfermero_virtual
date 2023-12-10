@@ -17,12 +17,14 @@ exports.getVisitasmed = async function (req, res, next) {
 
 // Crear visita medica
 exports.createVisitasmed = async function (req, res, next) {
-    var newVisitasmed = req.body; // Asumimos que req.body ya contiene los campos necesarios
+    var newVisitasmed = req.body; 
 
     try {
+        console.log(newVisitasmed);
         var createdVisitasmed = await VisitasmedService.createVisitasmed(newVisitasmed);
         return res.status(201).json({ token: createdVisitasmed, message: "Visita medica creada exitosamente" });
     } catch (e) {
+        console.error(e);
         return res.status(400).json({ status: 400, message: "Error al crear la visita medica" });
     }
 }

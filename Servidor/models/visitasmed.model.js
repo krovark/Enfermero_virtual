@@ -8,7 +8,7 @@ var validateFecha = (fecha) => {
 
 var visitasmedSchema = new mongoose.Schema({
     visita: { type: String, required: true},
-    fecha: {type: Date, required: true, validate: [validateFecha, 'Formato de fecha inválido. Use dd/mm/aaaa.']},
+    fecha: {type: Date, required: true},
     hora: { type: String, required: true },
     direccion: {type: String, required: true},
 
