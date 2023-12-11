@@ -15,6 +15,7 @@ router.get('/allvisitasmed',Authorization, VisitasmedController.getAllVisitasmed
 router.put('/:id/update', Authorization, VisitasmedController.updateVisitasmed)
 router.delete('/:id/delete', Authorization, VisitasmedController.removeVisitasmed)
 
+router.get('/proximas-visitas',Authorization ,VisitasmedController.getProximasVisitasController);
 
 
 // Export the Router

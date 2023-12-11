@@ -16,9 +16,23 @@ exports.getVisitasmed = async function (req, res, next) {
     }
 }
 
+
+exports.getProximasVisitasController = async function (req, res, next) {
+    try {
+        console.log("UserID en el controlador: ", req.userId);
+        var proximasVisitas = await VisitasmedService.getProximasVisitasmed(req.userId);
+        res.status(200).json({ status: 200, data: proximasVisitas, message: "Próximas visitas medicas obtenidas exitosamente" });
+    } catch (e) {
+        res.status(400).json({ status: 400, message: "Error al obtener próximas visitas medicas: " + e.message });
+    }
+};
+
+
+
 // Crear visita medica
 exports.createVisitasmed = async function (req, res, next) {
     var newVisitasmed = req.body; 
+    newVisitasmed.userID = req.userId;
 
     try {
         console.log(newVisitasmed);

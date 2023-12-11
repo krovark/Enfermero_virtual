@@ -11,7 +11,11 @@ var visitasmedSchema = new mongoose.Schema({
     fecha: {type: Date, required: true},
     hora: { type: String, required: true },
     direccion: {type: String, required: true},
-
+    userID: {
+        type: mongoose.Schema.Types.ObjectId, 
+        required: true,
+        ref: 'User'
+    },
 },{collection: 'turnos'});
 
 // Agregando el plugin para paginación
