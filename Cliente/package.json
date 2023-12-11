@@ -34,7 +34,8 @@
     "react-native-swiper": "^1.6.0",
     "react-native-web": "~0.19.6",
     "save": "^2.9.0",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "expo-notifications": "~0.20.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

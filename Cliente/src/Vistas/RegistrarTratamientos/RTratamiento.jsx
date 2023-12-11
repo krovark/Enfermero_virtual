@@ -3,10 +3,11 @@ import { Text, StyleSheet, Switch, ScrollView, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import { Button, TextInput } from 'react-native-paper';
+import * as Notifications from 'expo-notifications';
 
 
 const Tratamientos = () => {
-  const [tratamineto, setTratamiento] = useState(''); // State to hold the input text
+  const [tratamiento, setTratamiento] = useState(''); // State to hold the input text
   const [notas, setNotas] = useState('');
   const [isToggled, setToggled] = useState(false);
   const toggleSwitch = () => {
@@ -25,7 +26,19 @@ const Tratamientos = () => {
 
   const handleSubmit = () => {
     // Do something with the user's input (e.g., save it to a variable or send it to a server)
-    console.log('Tratamiento:', tratamineto, 'Horario:', time, 'Notas:', notas, 'Alarma:', isToggled, 'Frecuencia:', horas);
+    console.log('Tratamiento:', tratamiento, 'Horario:', time, 'Notas:', notas, 'Alarma:', isToggled, 'Frecuencia:', horas);
+  if (isToggled) {
+    const triggerNotifications = async () => {
+    await Notifications.scheduleNotificationAsync({
+    content: {
+      title: tratamiento,
+      body: notas,
+    },
+    trigger: { date: time },
+    });
+  }
+  triggerNotifications();
+  }
   };
   return (
     <KeyboardAwareScrollView
@@ -37,7 +50,7 @@ const Tratamientos = () => {
         label="Nombre:"
         style={styles.input}
         onChangeText={(input) => setTratamiento(input)}
-        value={tratamineto}
+        value={tratamiento}
         mode="outlined"
       />
 
