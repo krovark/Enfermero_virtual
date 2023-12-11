@@ -62,8 +62,6 @@ exports.getProximasVisitasmed = async function (userId) {
 };
 
 
-
-
 exports.createVisitasmed = async function (visitasmed){
 
     const fechaFormatoISO = moment(visitasmed.fecha, 'DD/MM/YYYY').toDate();

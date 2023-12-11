@@ -46,6 +46,7 @@ exports.createVisitasmed = async function (req, res, next) {
     }
 }
 
+
 // Actualizar visita medica
 exports.updateVisitasmed = async function (req, res, next) {
     var visitasmedId = req.params.id; // Asumiendo que el ID se envía como parámetro

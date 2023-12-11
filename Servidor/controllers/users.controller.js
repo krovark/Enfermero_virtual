@@ -15,17 +15,6 @@ exports.getUsers = async function (req, res, next) {
     }
 }
 
-// Crear usuario
-// exports.createUser = async function (req, res, next) {
-//     var newUser = req.body; 
-
-//     try {
-//         var createdUser = await UserService.createUser(newUser);
-//         return res.status(201).json({ token: createdUser, message: "Usuario creado exitosamente" });
-//     } catch (e) {
-//         return res.status(400).json({ status: 400, message: "Error al crear el usuario" });
-//     }
-// }
 
 exports.createUser = async function (req, res, next) {
     console.log("llegue al controller", req.body);
