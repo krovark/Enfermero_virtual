@@ -64,8 +64,7 @@ exports.getTratamiento = async function (req, res, next) {
     }
 }
 
-// Crear tratamiento
-// Crear tratamiento
+
 exports.createTratamiento = async function (req, res, next) {
     var newTratamiento = req.body; 
     // Asumimos que req.body ya contiene los campos necesarios

@@ -11,7 +11,7 @@ const tratamientoSchema = new mongoose.Schema({
     notas: { type: String, required: false },
     fechaInicio: { type: Date, required: true },
     hastaCuando: { type: Date },
-});
+},{collection: 'tratamientos'});
 
 tratamientoSchema.plugin(mongoosePaginate);
 
