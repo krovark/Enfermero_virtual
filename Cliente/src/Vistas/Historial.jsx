@@ -63,7 +63,7 @@ const Historial = (props) => {
                         <ListItem.Title style={styles.titleStyle}>{item.action} {item.medicine}</ListItem.Title>
                         <ListItem.Subtitle>{item.date.toString()} {item.time.toString()}</ListItem.Subtitle>
                     </ListItem.Content>
-                    <Text>{item.status}</Text>
+                    {/* <Text>{item.status}</Text> */}
                     <Ionicons name={result.name} size={32} color={result.color} />
                 </ListItem>
                 <View style={styles.hairline} />

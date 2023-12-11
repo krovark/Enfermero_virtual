@@ -4,6 +4,8 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const sgMail = require('@sendgrid/mail');
+var Tratamiento = require('../models/tratamiento.model');
+var VisitaMedica = require('../models/visitasmed.model');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -73,44 +75,6 @@ exports.createUser = async function (user) {
     }
 }
 
-
-// exports.updateUser = async function (user) {
-    
-//     var id = {name :user.name}
-//     console.log(id)
-//     try {
-//         //Find the old User Object by the Id
-//         var oldUser = await User.findOne(id);
-//         console.log (oldUser)
-//     } catch (e) {
-//         throw Error("Error occured while Finding the User")
-//     }
-//     // If no old User Object exists return false
-//     if (!oldUser) {
-//         return false;
-//     }
-//     //Edit the User Object
-//     var hashedPassword = bcrypt.hashSync(user.password, 8);
-//     oldUser.name = user.name
-//     oldUser.email = user.email
-//     oldUser.password = hashedPassword
-//     try {
-//         var savedUser = await oldUser.save()
-//         return savedUser;
-//     } catch (e) {
-//         throw Error("And Error occured while updating the User");
-//     }
-// }
-
-
-// exports.updateUser = async function (userId, userData) {
-//     try {
-//         var updatedUser = await User.findByIdAndUpdate(userId, userData, { new: true });
-//         return updatedUser;
-//     } catch (e) {
-//         throw Error("Error al actualizar el usuario");
-//     }
-// }
 
 exports.updateUser = async function (userId, userData) {
     try {
@@ -234,26 +198,6 @@ exports.getProfile = async function (userId) {
     }
 };
 
-
-// exports.forgotPassword = async function(email) {
-//     try {
-//         const user = await User.findOne({ email: email });
-//         if (!user) {
-//             throw new Error('No existe una cuenta con ese email.');
-//         }
-
-//         const token = crypto.randomBytes(4).toString('hex');
-//         user.resetPasswordToken = token;
-//         user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
-//         await user.save();
-
-//         return { token };  // Envía el token como respuesta
-//     } catch (error) {
-//         throw error;
-//     }
-// };
-
-
 // exports.forgotPassword = async function(email) {
 //     try {
 //         const user = await User.findOne({ email: email });
@@ -315,5 +259,18 @@ exports.verifyAndUpdate = async function(resetPasswordToken, password) {
     } catch (e) {
         throw new Error('Error al verificar y actualizar: ' + e.message);
         console.error(e);
+    }
+};
+
+exports.getUpcomingMedicalVisits = async function(userId) {
+    try {
+        const currentDate = new Date();
+        const visits = await VisitaMedica.find({
+            usuario: userId, // Asegúrate de que este campo coincida con tu modelo
+            fecha: { $gte: currentDate }
+        });
+        return visits;
+    } catch (e) {
+        throw Error('Error al obtener visitas médicas próximas: ' + e.message);
     }
 };

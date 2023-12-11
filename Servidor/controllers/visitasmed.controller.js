@@ -1,4 +1,5 @@
 var VisitasmedService = require('../services/visitasmed.service')
+const moment = require('moment');
 
 _this = this;
 
@@ -15,17 +16,36 @@ exports.getVisitasmed = async function (req, res, next) {
     }
 }
 
+
+exports.getProximasVisitasController = async function (req, res, next) {
+    try {
+        console.log("UserID en el controlador: ", req.userId);
+        var proximasVisitas = await VisitasmedService.getProximasVisitasmed(req.userId);
+        res.status(200).json({ status: 200, data: proximasVisitas, message: "Próximas visitas medicas obtenidas exitosamente" });
+    } catch (e) {
+        res.status(400).json({ status: 400, message: "Error al obtener próximas visitas medicas: " + e.message });
+    }
+};
+
+
+
 // Crear visita medica
 exports.createVisitasmed = async function (req, res, next) {
-    var newVisitasmed = req.body; // Asumimos que req.body ya contiene los campos necesarios
+    var newVisitasmed = req.body; 
+    newVisitasmed.userID = req.userId;
 
     try {
+        console.log(newVisitasmed);
+        newVisitasmed.fecha = moment(newVisitasmed.fecha, 'DD/MM/YYYY').toDate();
         var createdVisitasmed = await VisitasmedService.createVisitasmed(newVisitasmed);
+    
         return res.status(201).json({ token: createdVisitasmed, message: "Visita medica creada exitosamente" });
     } catch (e) {
+        console.error("Error",e);
         return res.status(400).json({ status: 400, message: "Error al crear la visita medica" });
     }
 }
+
 
 // Actualizar visita medica
 exports.updateVisitasmed = async function (req, res, next) {

@@ -2,6 +2,10 @@
 var Visitasmed = require('../models/visitasmed.model');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
+const { parseFecha } = require('../utils/moments')
+const moment = require('moment');
+const mongoose = require('mongoose');
+
 
 // Saving the context of this module inside the _the variable
 _this = this
@@ -23,25 +27,60 @@ exports.getVisitasmed = async function (query, page, limit) {
 
     } catch (e) {
         // return a Error message describing the reason 
-        console.log("error services",e)
+        console.error("error services",e)
         throw Error('Error while Paginating Users');
     }
 }
 
+
+exports.getProximasVisitasmed = async function (userId) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    console.log("UserID: " + userId);
+    console.log("Fecha actual: " + today.toISOString());
+
+    try {
+        var proximasVisitas = await Visitasmed.find({
+            userID: mongoose.Types.ObjectId(userId),
+            fecha: { $gte: today }
+        }).sort({ fecha: 1 }).limit(2);
+
+        // Transformar las fechas a formato dd/mm/aaaa
+        var visitasFormateadas = proximasVisitas.map(visita => {
+            return {
+                ...visita.toObject(), // Convierte a un objeto JavaScript simple
+                fecha: moment(visita.fecha).format('DD/MM/YYYY') // Formatea la fecha
+            };
+        });
+
+        console.log("Próximas Visitas: ", visitasFormateadas);
+        return visitasFormateadas;
+    } catch (e) {
+        throw Error("Error al obtener próximas visitas medicas: " + e.message);
+    }
+};
+
+
 exports.createVisitasmed = async function (visitasmed){
+
+    const fechaFormatoISO = moment(visitasmed.fecha, 'DD/MM/YYYY').toDate();
 
     var newVisitasmed = new Visitasmed({
         visita: visitasmed.visita,
-        fecha: visitasmed.fecha,
+        fecha: fechaFormatoISO,
         hora: visitasmed.hora,
         direccion: visitasmed.direccion,
+        userID: visitasmed.userID
     });
 
     try {
+        console.log(newVisitasmed);
         var savedVisitasmed = await newVisitasmed.save();
         var token = jwt.sign({ id: savedVisitasmed._id }, process.env.SECRET, { expiresIn: 86400});
         return token;
     } catch (e) {
+        console.error(e);
         throw Error("Error al crear Visita Medica");
     }
 }

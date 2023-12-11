@@ -42,7 +42,7 @@ const HomeScreen = () => {
     container: {
       flex: 1,
       padding: 20,
-      // backgroundColor: 'white',
+      
     },
 
     backgroundImage: {

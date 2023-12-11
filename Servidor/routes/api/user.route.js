@@ -12,13 +12,13 @@ router.get('/', function(req, res, next) {
 router.post('/registration', UserController.createUser)
 router.post('/login', UserController.loginUser)
 router.get('/users',Authorization, UserController.getUsers)
-router.get('/allusers',Authorization, UserController.getAllUsers)
+router.get('/allusers', Authorization, UserController.getAllUsers)
 router.get('/profile', Authorization, UserController.getProfile);
-router.patch('/:id/update', Authorization, UserController.updateUser)
-router.delete('/:id/delete', Authorization, UserController.removeUser)
+router.patch('/:id/update', Authorization, UserController.updateUser);
+router.delete('/:id/delete', Authorization, UserController.removeUser);
 router.post('/forgot-password', UserController.forgotPassword);
 router.post('/reset_password', UserController.verifyAndUpdate);
-
+router.get('/visitas-medicas', Authorization, UserController.getUpcomingMedicalVisits);
 // Export the Router
 module.exports = router;
 

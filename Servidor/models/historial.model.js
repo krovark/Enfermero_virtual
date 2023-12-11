@@ -10,7 +10,7 @@ var historialSchema = new mongoose.Schema({
         id: { type: String, required: true }
     },
     status: { type: Boolean, required: true },
-    isEnabled: { type: Boolean, required: true },
+    isEnabled: { type: Boolean, required: false },
     _idUser: { type: mongoose.Schema.Types.ObjectId, required: true }
 });
 

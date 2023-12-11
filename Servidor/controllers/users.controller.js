@@ -15,17 +15,6 @@ exports.getUsers = async function (req, res, next) {
     }
 }
 
-// Crear usuario
-// exports.createUser = async function (req, res, next) {
-//     var newUser = req.body; 
-
-//     try {
-//         var createdUser = await UserService.createUser(newUser);
-//         return res.status(201).json({ token: createdUser, message: "Usuario creado exitosamente" });
-//     } catch (e) {
-//         return res.status(400).json({ status: 400, message: "Error al crear el usuario" });
-//     }
-// }
 
 exports.createUser = async function (req, res, next) {
     console.log("llegue al controller", req.body);
@@ -154,31 +143,6 @@ exports.forgotPassword = async function(req, res) {
 };
     
 
-// exports.forgotPassword = async function(req, res) {
-//     try {
-//         const email = req.body.email;
-//         const response = await UserService.forgotPassword(email);
-//         res.status(200).json(response); // Envía el token como parte de la respuesta
-//     } catch (error) {
-//         res.status(400).json({ message: error.message });
-//     }
-// };
-
-
-// exports.verifyAndUpdate = async function(req, res) {
-//     try {
-//         const { resetPasswordToken, password } = req.body;
-//         console.log('Token:', resetPasswordToken, 'Nueva Contraseña:', password);
-
-//         const user = await UserService.verifyAndUpdate(resetPasswordToken, password);
-
-//         res.status(200).json({ message: 'Contraseña actualizada con éxito' });
-//     } catch (e) {
-//         console.error('Error en verifyAndUpdate:', e);
-//         res.status(500).json({ message: e.message });
-//     }
-// };
-
 exports.verifyAndUpdate = async function(req, res) {
     try {
         const { resetPasswordToken, password } = req.body;
@@ -191,5 +155,15 @@ exports.verifyAndUpdate = async function(req, res) {
     } catch (e) {
         console.error('Error en verifyAndUpdate:', e);
         res.status(500).json({ message: e.message });
+    }
+};
+
+exports.getUpcomingMedicalVisits = async function(req, res, next) {
+    try {
+        const userId = req.userId; // Asegúrate de obtener el userId correctamente
+        const visits = await UserService.getUpcomingMedicalVisits(userId);
+        return res.status(200).json({ status: 200, data: visits, message: "Visitas médicas próximas obtenidas exitosamente" });
+    } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
     }
 };

@@ -18,3 +18,4 @@ tratamientoSchema.plugin(mongoosePaginate);
 const Tratamiento = mongoose.model('Tratamiento', tratamientoSchema);
 
 module.exports = Tratamiento;
+
