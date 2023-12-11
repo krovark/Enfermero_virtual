@@ -3,6 +3,7 @@ var Visitasmed = require('../models/visitasmed.model');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 const { parseFecha } = require('../utils/moments')
+const moment = require('moment');
 
 // Saving the context of this module inside the _the variable
 _this = this
@@ -35,7 +36,7 @@ exports.createVisitasmed = async function (visitasmed){
 
     var newVisitasmed = new Visitasmed({
         visita: visitasmed.visita,
-        fecha: parseFecha(visitasmed.fecha),
+        fecha: fechaFormatoISO,
         hora: visitasmed.hora,
         direccion: visitasmed.direccion,
     });
@@ -46,6 +47,7 @@ exports.createVisitasmed = async function (visitasmed){
         var token = jwt.sign({ id: savedVisitasmed._id }, process.env.SECRET, { expiresIn: 86400});
         return token;
     } catch (e) {
+        console.error(e);
         throw Error("Error al crear Visita Medica");
     }
 }

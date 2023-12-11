@@ -1,4 +1,5 @@
 var VisitasmedService = require('../services/visitasmed.service')
+const moment = require('moment');
 
 _this = this;
 
@@ -21,10 +22,12 @@ exports.createVisitasmed = async function (req, res, next) {
 
     try {
         console.log(newVisitasmed);
+        newVisitasmed.fecha = moment(newVisitasmed.fecha, 'DD/MM/YYYY').toDate();
         var createdVisitasmed = await VisitasmedService.createVisitasmed(newVisitasmed);
+    
         return res.status(201).json({ token: createdVisitasmed, message: "Visita medica creada exitosamente" });
     } catch (e) {
-        console.error(e);
+        console.error("Error",e);
         return res.status(400).json({ status: 400, message: "Error al crear la visita medica" });
     }
 }

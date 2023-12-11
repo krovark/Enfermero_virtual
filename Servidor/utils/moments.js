@@ -1,6 +1,7 @@
 const moment = require('moment');
 
 function formatFecha(fecha) {
+    
     return moment(fecha).format('DD/MM/YYYY');
 }
 
