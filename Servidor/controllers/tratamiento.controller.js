@@ -44,46 +44,57 @@ async function guardarAlarma(tratamientoId, fechaNotificacion, idPersona) {
     }
 }
 
-function calcularHastaCuando(fechaInicio, duracion) {
+// function calcularHastaCuando(fechaInicio, duracion) {
+//     const fechaFin = new Date(fechaInicio);
+//     fechaFin.setDate(fechaFin.getDate() + duracion);
+//     return fechaFin;
+// }
+
+
+function calcularHastaCuando(fechaInicio, intervalo, tomas) {
     const fechaFin = new Date(fechaInicio);
-    fechaFin.setDate(fechaFin.getDate() + duracion);
+    const totalHoras = intervalo * (tomas - 1);
+    fechaFin.setHours(fechaFin.getHours() + totalHoras);
+
     return fechaFin;
 }
 
+
 // Obtener lista de tratamiento
 exports.getTratamiento = async function (req, res, next) {
-    var idUser = req.params.idPersona;    var page = req.query.page ? req.query.page : 1;
-    var limit = req.query.limit ? req.query.limit : 10;
+    var userID = req.userId; 
+    console.log("UserID recibido en el controlador:", req.userId);
+    var page = req.query.page ? req.query.page : 1;
+    var limit = req.query.limit ? req.query.limit : 20;
 
     try {
-        
-        var Tratamiento = await TratamientoService.getTratamiento(idUser, page, limit);
-        return res.status(200).json({ status: 200, data: Tratamiento, message: "Tratamiento obtenido exitosamente" });
+        var tratamiento = await TratamientoService.getTratamiento(userID, page, limit);
+        return res.status(200).json({ status: 200, data: tratamiento, message: "Tratamientos obtenidos exitosamente" });
     } catch (e) {
+        console.error("Error al obtener tratamientos:", e); // Registro de errores
         return res.status(400).json({ status: 400, message: e.message });
     }
-}
+};
+
 
 
 exports.createTratamiento = async function (req, res, next) {
     var newTratamiento = req.body; 
-    // Asumimos que req.body ya contiene los campos necesarios
+    newTratamiento.userID = req.userId;
     
-    // Convierte las fechas de cadena a objetos Date
     newTratamiento.fechaInicio = new Date(newTratamiento.fechaInicio);
-    newTratamiento.hastaCuando = calcularHastaCuando(newTratamiento.fechaInicio, newTratamiento.duracion) ;
-
+   
+    newTratamiento.hastaCuando = calcularHastaCuando(newTratamiento.fechaInicio, newTratamiento.intervalo, newTratamiento.tomas);
     try {
         newTratamiento._id = mongoose.Types.ObjectId();
         const createdTratamiento = await TratamientoService.createTratamiento(newTratamiento);
-        await programarRecurrencia(createdTratamiento); // Programar recurrencia después de guardar el tratamiento
+        await programarRecurrencia(createdTratamiento); 
         return res.status(201).json({ token: createdTratamiento, message: "Tratamiento creado exitosamente" });
     } catch (e) {
-        // console.error("Error al crear el tratamiento 2:", e.message);
+        
         return res.status(400).json({ status: 400, message: e.message });
     }
 }
-
 
 
 // Actualizar tratamiento

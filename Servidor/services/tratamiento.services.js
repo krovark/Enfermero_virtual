@@ -11,7 +11,6 @@ exports.createTratamiento = async (tratamientoData) => {
     try {
         const nuevoTratamiento = new Tratamiento(tratamientoData);
         const resultado = await nuevoTratamiento.save();
-        console.log("Hola es el createService", resultado);
         return resultado;
     } catch (error) {
         console.error("Error al crear el tratamiento1:", error);
@@ -21,13 +20,17 @@ exports.createTratamiento = async (tratamientoData) => {
 
 
 
-exports.getTratamiento = async (idPersona, idTratamiento) => {
+exports.getTratamiento = async (userID, page, limit) => {
     try {
-        const tratamiento = await Tratamiento.findOne({ idPersona, _id: idTratamiento });
-        return tratamiento;
+        var options = {
+            page,
+            limit
+        };
+        const tratamientos = await Tratamiento.paginate({ userID: userID }, options);
+        return tratamientos;
     } catch (error) {
-        console.error(error);
-        throw new Error("Error al obtener el tratamiento");
+        console.error("Error al obtener tratamientos:", error); // Registro de errores
+        throw new Error("Error al obtener tratamientos");
     }
 };
 

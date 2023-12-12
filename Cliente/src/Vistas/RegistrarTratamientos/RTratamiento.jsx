@@ -5,7 +5,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { Button, TextInput } from 'react-native-paper';
 import * as Notifications from 'expo-notifications';
 
-
 const Tratamientos = () => {
   const [tratamiento, setTratamiento] = useState(''); // State to hold the input text
   const [notas, setNotas] = useState('');
@@ -23,10 +22,13 @@ const Tratamientos = () => {
     }
   };
   const [horas, setHoras] = useState('');
+  const [tomas, setTomas] = useState('');
+  const [dosis, setDosis] = useState('');
 
   const handleSubmit = () => {
-    // Do something with the user's input (e.g., save it to a variable or send it to a server)
-    console.log('Tratamiento:', tratamiento, 'Horario:', time, 'Notas:', notas, 'Alarma:', isToggled, 'Frecuencia:', horas);
+   
+
+    console.log('Tratamiento:', tratamiento,"Dosis:", dosis, 'Horario:', time, 'Notas:', notas, 'Alarma:', isToggled, 'Intervalo:', horas, "Cantidad de tomas:", tomas );
   if (isToggled) {
     const triggerNotifications = async () => {
     await Notifications.scheduleNotificationAsync({
@@ -47,10 +49,18 @@ const Tratamientos = () => {
     >
       <ScrollView contentContainerStyle={styles.inner}>
       <TextInput
-        label="Nombre:"
+        label="Tratamiento"
         style={styles.input}
         onChangeText={(input) => setTratamiento(input)}
         value={tratamiento}
+        mode="outlined"
+      />
+
+<TextInput
+        label="Dosis"
+        style={styles.input}
+        onChangeText={(input) => setDosis(input)}
+        value={dosis}
         mode="outlined"
       />
 
@@ -68,10 +78,19 @@ const Tratamientos = () => {
       )}
 
       <TextInput
-        label="Frecuencia en horas:"
+        label="Intervalo de tomas en horas"
         style={styles.input}
         value={horas}
         onChangeText={(input) => setHoras(input)}
+        keyboardType="numeric"
+        mode="outlined"
+      />
+
+<TextInput
+        label="Cantidad de tomas "
+        style={styles.input}
+        value={tomas}
+        onChangeText={(input) => setTomas(input)}
         keyboardType="numeric"
         mode="outlined"
       />
@@ -153,3 +172,5 @@ const styles = StyleSheet.create({
 });
 
 export default Tratamientos;
+
+

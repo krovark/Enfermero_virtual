@@ -2,12 +2,13 @@ const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
 
 const tratamientoSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-    idPersona: { type: mongoose.Schema.Types.ObjectId, ref: 'Persona', required: true },
+
+    userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     medicamento: { type: String, required: true },
     dosis: { type: String, required: true },
-    recurrencia: { type: String, required: true },
-    duracion: { type: Number, required: true },
+    recurrencia: { type: String, required: false },
+    tomas: { type: Number, required: true },
+    intervalo: { type: Number, required: true },
     notas: { type: String, required: false },
     fechaInicio: { type: Date, required: true },
     hastaCuando: { type: Date },
