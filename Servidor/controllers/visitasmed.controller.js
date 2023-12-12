@@ -36,15 +36,17 @@ exports.createVisitasmed = async function (req, res, next) {
 
     try {
         console.log(newVisitasmed);
-        newVisitasmed.fecha = moment(newVisitasmed.fecha, 'DD/MM/YYYY').toDate();
+        // Si la fecha ya está en formato ISO 8601, simplemente conviértela a un objeto Date
+        newVisitasmed.fecha = new Date(newVisitasmed.fecha);
+
         var createdVisitasmed = await VisitasmedService.createVisitasmed(newVisitasmed);
     
         return res.status(201).json({ token: createdVisitasmed, message: "Visita medica creada exitosamente" });
     } catch (e) {
-        console.error("Error",e);
+        console.error("Error", e);
         return res.status(400).json({ status: 400, message: "Error al crear la visita medica" });
     }
-}
+};
 
 
 // Actualizar visita medica

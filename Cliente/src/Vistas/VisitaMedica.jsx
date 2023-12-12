@@ -1,91 +1,102 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Switch, FlatList, Pressable, SafeAreaView } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { IconButton, Card, Button, Title} from 'react-native-paper';
+import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
+import { Card, Button } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import API_URL from '../utils/fetchConfig';
 import { useNavigation } from '@react-navigation/native';
 
 const ListaVisitaMedica = () => {
-  const data = [{
-    id: 0,
-    time: '17:30',
-    date: '2023-10-31',
-    description: 'Traumatologo',
-    alarmNotifData: {
-      id: 'efdfoiuad120983102',
-    },
-    status: true,
-    isEnabled: true,
-  }, {
-    id: 1,
-    time: '16:30',
-    date: '2023-10-31',
-    description: 'Dermatologo',
-    action: '1 comprimido',
-    alarmNotifData: {
-      id: 'efdfoiuad120983102',
-    },
-    status: true,
-    isEnabled: true,
-  },]
-
+  const [visitasMedicas, setVisitasMedicas] = useState([]);
   const navigation = useNavigation();
-  const [isEnabled, setIsEnabled] = useState([true, false, true, true, false]);
+  
 
-  const toggleSwitch = (id, state) => {
-    console.log('===')
-    console.log(id)
-    console.log(state)
-    console.log(isEnabled)
-    console.log('===')
-    // isEnabled[id]=state
-    // setIsEnabled(previousState => !previousState)
-  }
+  const fetchVisitasMedicas = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const response = await fetch(`${API_URL}/visitasmed/visitasmed`, {
+        headers: {
+          'x-access-token': token,
+        },
+      });
 
-return (
-      <View style={styles.container}>
-        
-        <FlatList 
-        data={data}
-        keyExtractor={(item, index) => item.id + index.toString()}
+      if (response.ok) {
+        const data = await response.json();
+        setVisitasMedicas(data.data.docs);
+      } else {
+        throw new Error('Error al obtener las visitas médicas');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchVisitasMedicas(); // Ejecutar al montar el componente
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchVisitasMedicas(); // Ejecutar cuando la pantalla obtenga el foco
+    });
+
+    return unsubscribe; // Limpiar el listener al desmontar el componente
+  }, [navigation]);
+
+  const borrarVisitaMedica = async (id) => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const response = await fetch(`${API_URL}/visitasmed/${id}/delete`, {
+        method: 'DELETE',
+        headers: {
+          'x-access-token': token,
+        },
+      });
+
+      if (response.ok) {
+        Alert.alert('Visita Médica Borrada', 'La visita médica ha sido borrada exitosamente');
+        setVisitasMedicas(visitasMedicas.filter((visita) => visita._id !== id));
+      } else {
+        throw new Error('Error al borrar la visita médica');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', error.message);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={visitasMedicas}
+        keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-        <Card contentStyle={styles.card}>
-          <Card.Title title={item.description} subtitle={item.date}/>
-        <Card.Content>
-        </Card.Content>
-        <Card.Actions>
-          <Button>Borrar</Button>
-        </Card.Actions>
-        </Card>
-        )}  />
-        <View>
-        <Button onPress={() => navigation.navigate('RegistroVisita')}> Agregar Visita Medica </Button>
-        </View>
+          <Card style={styles.card}>
+            <Card.Title title={item.visita} subtitle={`${item.fecha} - ${item.hora}`} />
+            <Card.Content>
+              <Text>{item.direccion}</Text>
+            </Card.Content>
+            <Card.Actions>
+              <Button onPress={() => borrarVisitaMedica(item._id)}>Borrar</Button>
+            </Card.Actions>
+          </Card>
+        )}
+      />
+      <View>
+        <Button onPress={() => navigation.navigate('RegistroVisita')}>Agregar Visita Médica</Button>
       </View>
-    );
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
   },
-
   card: {
-    flex: 1,
-    justifyContent: "space-evenly",
+    marginBottom: 10,
+    borderRadius: 20,
     borderWidth: 5,
-    borderBlockColor: '#663399',
-    gap: 5,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    marginTop: 10,
-  },
-  hairline: {
-    backgroundColor: '#888',
-    height: 1,
-    width: '100%',
+    borderColor: '#663399',
   },
 });
 

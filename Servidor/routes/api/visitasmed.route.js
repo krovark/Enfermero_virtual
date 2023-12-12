@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
     res.send('Llegaste a la ruta de  api/visitasmed.routes');
   });
 router.post('/registration',Authorization, VisitasmedController.createVisitasmed)
-// router.get('/allvisitasmed',Authorization, VisitasmedController.getAllVisitasmed)
+router.get('/visitasmed',Authorization, VisitasmedController.getVisitasmed)
 router.put('/:id/update', Authorization, VisitasmedController.updateVisitasmed)
 router.delete('/:id/delete', Authorization, VisitasmedController.removeVisitasmed)
 router.get('/proximas-visitas',Authorization ,VisitasmedController.getProximasVisitasController);

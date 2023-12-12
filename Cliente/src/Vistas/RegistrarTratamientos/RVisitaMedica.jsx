@@ -3,7 +3,10 @@ import { Text, StyleSheet, Switch, ScrollView, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import { Button, TextInput } from 'react-native-paper';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
+import API_URL from '../../utils/fetchConfig'
+import { useNavigation } from '@react-navigation/native';
 
 const VisitasMedicas = () => {
   const [visitaMedica, setVisitaMedica] = useState(''); // State to hold the input text
@@ -31,10 +34,52 @@ const VisitasMedicas = () => {
     }
   };
 
-  const handleSubmit = () => {
-    // Do something with the user's input (e.g., save it to a variable or send it to a server)
-    console.log('Visita medica:', visitaMedica,'Fecha: ', date, 'Hora:', time, 'Direccion:', direccion, 'Alarma:', isToggled);
+  
+
+  const handleSubmit = async () => {
+    console.log('Visita medica:', visitaMedica, 'Fecha:', date, 'Hora:', time, 'Direccion:', direccion, 'Alarma:', isToggled);
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const response = await fetch(`${API_URL}/visitasmed/registration`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': token,
+        },
+        body: JSON.stringify({
+          visita: visitaMedica,
+          fecha: date.toISOString(),
+          hora: time.toISOString(),
+          direccion: direccion,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.status === 200) {
+        Alert.alert(
+          'Visita Médica Registrada',
+          'La visita médica ha sido registrada exitosamente',
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                // Actualizar la lista de visitas médicas
+                navigation.navigate('ListaVisitaMedica', { updateList: true });
+              }
+            }
+          ]
+        );
+      } else {
+        console.log(token);
+        Alert.alert('Error', data.message || 'No se pudo registrar la visita médica');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'No se pudo registrar la visita médica');
+    }
   };
+
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={styles.container}

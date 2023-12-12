@@ -61,20 +61,48 @@ function calcularHastaCuando(fechaInicio, intervalo, tomas) {
 
 
 // Obtener lista de tratamiento
+// exports.getTratamiento = async function (req, res, next) {
+//     var userID = req.userId; 
+//     console.log("UserID recibido en el controlador:", req.userId);
+//     var page = req.query.page ? req.query.page : 1;
+//     var limit = req.query.limit ? req.query.limit : 20;
+
+//     try {
+//         var tratamiento = await TratamientoService.getTratamiento(userID, page, limit);
+//         return res.status(200).json({ status: 200, data: tratamiento, message: "Tratamientos obtenidos exitosamente" });
+//     } catch (e) {
+//         console.error("Error al obtener tratamientos:", e); // Registro de errores
+//         return res.status(400).json({ status: 400, message: e.message });
+//     }
+// };
+
 exports.getTratamiento = async function (req, res, next) {
     var userID = req.userId; 
-    console.log("UserID recibido en el controlador:", req.userId);
     var page = req.query.page ? req.query.page : 1;
     var limit = req.query.limit ? req.query.limit : 20;
 
     try {
         var tratamiento = await TratamientoService.getTratamiento(userID, page, limit);
-        return res.status(200).json({ status: 200, data: tratamiento, message: "Tratamientos obtenidos exitosamente" });
+
+        // Mapeo para agregar el campo horarioToma
+        const tratamientosConHorario = tratamiento.docs.map(t => {
+            const fechaInicio = new Date(t.fechaInicio); // Asegúrate de que fechaInicio sea un objeto Date
+            const horarioToma = fechaInicio.getHours().toString().padStart(2, '0') + ':' + 
+                                fechaInicio.getMinutes().toString().padStart(2, '0') + ':' + 
+                                fechaInicio.getSeconds().toString().padStart(2, '0');
+            return {
+                ...t._doc, // Esto copia todos los campos existentes del tratamiento
+                horarioToma // Esto añade el horario en hora local
+            };
+        });
+
+        return res.status(200).json({ status: 200, data: tratamientosConHorario, message: "Tratamientos obtenidos exitosamente" });
     } catch (e) {
         console.error("Error al obtener tratamientos:", e); // Registro de errores
         return res.status(400).json({ status: 400, message: e.message });
     }
 };
+
 
 
 

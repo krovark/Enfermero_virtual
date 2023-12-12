@@ -12,54 +12,57 @@ _this = this
 
 // Async function to get the User List
 exports.getVisitasmed = async function (query, page, limit) {
+    // Opciones para la paginación
+    var options = { page, limit };
 
-    // Options setup for the mongoose paginate
-    var options = {
-        page,
-        limit
-    }
-    // Try Catch the awaited promise to handle the error 
     try {
-        console.log("Query",query)
-        var Visitasmed = await Visitasmed.paginate(query, options)
-        // Return the visitasmed list that was retured by the mongoose promise
-        return Visitasmed;
+        var visitasResult = await Visitasmed.paginate(query, options);
 
+        // Formatear cada visita médica
+        var visitasFormateadas = visitasResult.docs.map(visita => {
+            return {
+                ...visita.toObject(), // Convierte el documento Mongoose a un objeto JS
+                fecha: new Date(visita.fecha).toLocaleDateString('es-AR'), // Formatea la fecha
+                hora: new Date(visita.hora).toLocaleTimeString('es-AR'), // Formatea la hora
+            };
+        });
+
+        // Reemplazar los docs con las visitas formateadas
+        visitasResult.docs = visitasFormateadas;
+
+        return visitasResult;
     } catch (e) {
-        // return a Error message describing the reason 
-        console.error("error services",e)
-        throw Error('Error while Paginating Users');
+        console.error("error services", e);
+        throw Error('Error while Paginating Visitas Med');
     }
 }
-
 
 exports.getProximasVisitasmed = async function (userId) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    console.log("UserID: " + userId);
-    console.log("Fecha actual: " + today.toISOString());
-
     try {
         var proximasVisitas = await Visitasmed.find({
             userID: mongoose.Types.ObjectId(userId),
             fecha: { $gte: today }
-        }).sort({ fecha: 1 }).limit(2);
+        }).sort({ fecha: 1 }).limit(4);
 
-        // Transformar las fechas a formato dd/mm/aaaa
+        // Transformar las fechas a formato dd/mm/aaaa y las horas al formato local
         var visitasFormateadas = proximasVisitas.map(visita => {
             return {
                 ...visita.toObject(), // Convierte a un objeto JavaScript simple
-                fecha: moment(visita.fecha).format('DD/MM/YYYY') // Formatea la fecha
+                fecha: moment(visita.fecha).format('DD/MM/YYYY'), // Formatea la fecha
+                hora: new Date(visita.hora).toLocaleTimeString('es-AR'), // Formatea la hora al horario local
             };
         });
 
-        console.log("Próximas Visitas: ", visitasFormateadas);
         return visitasFormateadas;
     } catch (e) {
-        throw Error("Error al obtener próximas visitas medicas: " + e.message);
+        console.error("Error al obtener próximas visitas medicas: " + e.message);
+        throw Error("Error al obtener próximas visitas medicas");
     }
 };
+
 
 
 exports.createVisitasmed = async function (visitasmed){
