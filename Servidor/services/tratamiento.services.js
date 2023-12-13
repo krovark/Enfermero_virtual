@@ -21,10 +21,6 @@ exports.createTratamiento = async (tratamientoData) => {
 
 
 exports.getTratamiento = async (userID, page, limit) => {
-
-    var queryWithUser = { ...query, userId: userId };
-    var options = { page, limit };
-
     try {
         var options = {
             page,
@@ -84,14 +80,37 @@ exports.removeTratamiento = async (idPersona, idTratamiento) => {
 exports.getProximosTratamientos = async (userID) => {
     try {
         const ahora = new Date();
+        console.log("Fecha y hora actual: ", ahora);
+        console.log("UserID: ", userID);
+
         const tratamientos = await Tratamiento.find({ 
             userID: userID,
-            fechaInicio: { $gte: ahora } 
+            fechaInicio: { $lte: ahora },
+            hastaCuando: { $gte: ahora }
         }).sort({ fechaInicio: 1 }).limit(3);
+        
+        const tratamientosConContador = tratamientos.map(t => {
+            const fechaInicio = new Date(t.fechaInicio);
+            const fechaHastaCuando = new Date(t.hastaCuando);
+            const diferenciaHoras = Math.abs(ahora - fechaInicio) / 36e5; // Diferencia en horas
+            const tomasRealizadas = Math.floor(diferenciaHoras / t.intervalo);
+            const tomasRestantes = t.tomas - tomasRealizadas;
 
-        return tratamientos;
+            return {
+                ...t._doc,
+                fechaInicio: fechaInicio.toLocaleDateString("es-AR"),
+                hastaCuando: fechaHastaCuando.toLocaleDateString("es-AR"),
+                tomasRealizadas,
+                tomasRestantes
+            };
+        });
+
+        console.log("Tratamientos en curso con contador de tomas y fechas formateadas: ", tratamientosConContador);
+        return tratamientosConContador;
     } catch (error) {
-        console.error("Error al obtener próximos tratamientos:", error);
-        throw new Error("Error al obtener próximos tratamientos");
+        console.error("Error al obtener tratamientos en curso:", error);
+        throw new Error("Error al obtener tratamientos en curso");
     }
 };
+
+

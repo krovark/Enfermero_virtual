@@ -59,23 +59,6 @@ function calcularHastaCuando(fechaInicio, intervalo, tomas) {
     return fechaFin;
 }
 
-
-// Obtener lista de tratamiento
-// exports.getTratamiento = async function (req, res, next) {
-//     var userID = req.userId; 
-//     console.log("UserID recibido en el controlador:", req.userId);
-//     var page = req.query.page ? req.query.page : 1;
-//     var limit = req.query.limit ? req.query.limit : 20;
-
-//     try {
-//         var tratamiento = await TratamientoService.getTratamiento(userID, page, limit);
-//         return res.status(200).json({ status: 200, data: tratamiento, message: "Tratamientos obtenidos exitosamente" });
-//     } catch (e) {
-//         console.error("Error al obtener tratamientos:", e); // Registro de errores
-//         return res.status(400).json({ status: 400, message: e.message });
-//     }
-// };
-
 exports.getTratamiento = async function (req, res, next) {
     var userID = req.userId; 
     var page = req.query.page ? req.query.page : 1;
@@ -172,13 +155,16 @@ exports.getAllTratamiento = async function (req, res, next) {
 }
 
 exports.getProximosTratamientos = async function (req, res, next) {
-    var userID = req.userId; // Obtener el ID del usuario logueado
+    var userID = req.userId; 
+    console.log("UserID en el controlador: ", userID);
 
     try {
         var tratamientos = await TratamientoService.getProximosTratamientos(userID);
-        return res.status(200).json({ status: 200, data: tratamientos, message: "Próximos tratamientos obtenidos exitosamente" });
+        console.log("Tratamientos en curso obtenidos: ", tratamientos);
+
+        return res.status(200).json({ status: 200, data: tratamientos, message: "Tratamientos en curso obtenidos exitosamente" });
     } catch (e) {
-        console.error("Error al obtener próximos tratamientos:", e);
+        console.error("Error al obtener tratamientos en curso:", e);
         return res.status(400).json({ status: 400, message: e.message });
     }
 };

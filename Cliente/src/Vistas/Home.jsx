@@ -6,11 +6,33 @@ import API_URL from '../utils/fetchConfig';
 import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = () => {
-  const [tratamientos, setTratamientos] = useState([
-    { id: '001', nombre: 'Tratamiento 1', tiempo: '24 min' },
-    { id: '002', nombre: 'Tratamiento 2', tiempo: '57 min' },
-  ]);
+  const [proximosTratamientos, setProximosTratamientos] = useState([]);
   const [turnosMedicos, setTurnosMedicos] = useState([]);
+
+  const fetchProximosTratamientos = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const response = await fetch(`${API_URL}/tratamiento/proximos-tratamientos`, {
+        headers: {
+          'x-access-token': token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.data.length > 0) {
+          setProximosTratamientos(data.data);
+        } else {
+          setProximosTratamientos([]);
+        }
+      } else {
+        throw new Error('Error al obtener los próximos tratamientos');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', error.message || 'No se pudieron obtener los próximos tratamientos');
+    }
+  };
 
   const fetchTurnosMedicos = async () => {
     try {
@@ -44,28 +66,41 @@ const HomeScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
+      fetchProximosTratamientos();
       fetchTurnosMedicos();
     }, [])
   );
 
-  const data = [
-    { id: 'header1', type: 'header', title: 'Tratamientos' },
-    ...tratamientos,
-    { id: 'header2', type: 'header', title: 'Turnos Médicos' },
-    ...turnosMedicos,
-  ];
-
   const renderItem = ({ item }) => {
     if (item.type === 'header') {
       return <Text style={styles.header}>{item.title}</Text>;
+    } else if (item.type === 'tratamiento') {
+      return (
+        <Card style={styles.card}>
+          <Card.Title 
+          title={`${item.medicamento} - ${item.dosis}`} titleStyle={styles.tratamientoTitle} />
+          <Card.Content>
+            <Text>Hasta: {item.hastaCuando}</Text>
+            <Text>Tomas restantes: {item.tomasRestantes}</Text>
+          </Card.Content>
+        </Card>
+      );
+    } else {
+      return (
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>{item.nombre}</Text>
+          <Text style={styles.cardSubtitle}>{item.fecha}</Text>
+        </View>
+      );
     }
-    return (
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>{item.nombre}</Text>
-        <Text style={styles.cardSubtitle}>{item.tiempo || item.fecha}</Text>
-      </View>
-    );
   };
+
+  const data = [
+    { id: 'header1', type: 'header', title: 'Próximos Tratamientos' },
+    ...proximosTratamientos.map(tratamiento => ({ ...tratamiento, type: 'tratamiento', key: `tratamiento-${tratamiento._id}` })),
+    { id: 'header2', type: 'header', title: 'Turnos Médicos' },
+    ...turnosMedicos.map(turno => ({ ...turno, key: `turno-${turno.id}` })),
+  ];
 
   const styles = StyleSheet.create({
     container: {
@@ -105,14 +140,19 @@ const HomeScreen = () => {
       color: '#666',
       marginTop: 6,
     },
+    tratamientoTitle: {
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
   });
 
   return (
-    <ImageBackground source={require('../../assets/home.png')} style={styles.backgroundImage}>
+    // <ImageBackground source={require('../../assets/home.png')} style={styles.backgroundImage}>
+    <ImageBackground source={require('../../assets/FA.png')} style={styles.backgroundImage}>
       <View style={styles.container}>
         <FlatList
           data={data}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.key}
           renderItem={renderItem}
         />
       </View>
