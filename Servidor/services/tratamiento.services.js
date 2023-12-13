@@ -21,6 +21,10 @@ exports.createTratamiento = async (tratamientoData) => {
 
 
 exports.getTratamiento = async (userID, page, limit) => {
+
+    var queryWithUser = { ...query, userId: userId };
+    var options = { page, limit };
+
     try {
         var options = {
             page,
@@ -74,5 +78,20 @@ exports.removeTratamiento = async (idPersona, idTratamiento) => {
     } catch (error) {
         console.error(error);
         throw new Error("Error al eliminar el tratamiento");
+    }
+};
+
+exports.getProximosTratamientos = async (userID) => {
+    try {
+        const ahora = new Date();
+        const tratamientos = await Tratamiento.find({ 
+            userID: userID,
+            fechaInicio: { $gte: ahora } 
+        }).sort({ fechaInicio: 1 }).limit(3);
+
+        return tratamientos;
+    } catch (error) {
+        console.error("Error al obtener próximos tratamientos:", error);
+        throw new Error("Error al obtener próximos tratamientos");
     }
 };

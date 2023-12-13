@@ -11,14 +11,14 @@ const mongoose = require('mongoose');
 _this = this
 
 // Async function to get the User List
+
 exports.getVisitasmed = async function (query, page, limit) {
-    // Opciones para la paginación
     var options = { page, limit };
 
     try {
         var visitasResult = await Visitasmed.paginate(query, options);
 
-        // Formatear cada visita médica
+        
         var visitasFormateadas = visitasResult.docs.map(visita => {
             return {
                 ...visita.toObject(), // Convierte el documento Mongoose a un objeto JS
@@ -121,3 +121,20 @@ exports.getAllVisitasmed = async function () {
         throw Error('Error al obtener todos las visitas medicas');
     }
 }
+
+exports.getProximosTratamientos = async (userID) => {
+    try {
+        // Obtener la fecha y hora actual
+        const ahora = new Date();
+        // Buscar tratamientos que comiencen después de la fecha y hora actual
+        const tratamientos = await Tratamiento.find({ 
+            userID: userID,
+            fechaInicio: { $gte: ahora } 
+        }).sort({ fechaInicio: 1 }).limit(3);
+
+        return tratamientos;
+    } catch (error) {
+        console.error("Error al obtener próximos tratamientos:", error);
+        throw new Error("Error al obtener próximos tratamientos");
+    }
+};

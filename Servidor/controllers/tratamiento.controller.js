@@ -170,3 +170,15 @@ exports.getAllTratamiento = async function (req, res, next) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 }
+
+exports.getProximosTratamientos = async function (req, res, next) {
+    var userID = req.userId; // Obtener el ID del usuario logueado
+
+    try {
+        var tratamientos = await TratamientoService.getProximosTratamientos(userID);
+        return res.status(200).json({ status: 200, data: tratamientos, message: "Próximos tratamientos obtenidos exitosamente" });
+    } catch (e) {
+        console.error("Error al obtener próximos tratamientos:", e);
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};

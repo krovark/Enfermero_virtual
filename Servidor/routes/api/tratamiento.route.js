@@ -9,4 +9,7 @@ router.put('/:idPersona/:idTratamiento/update', Authorization, TratamientoContro
 router.delete('/:idPersona/:idTratamiento/delete', Authorization, TratamientoController.removeTratamiento);
 router.get('/tratamientos', Authorization, TratamientoController.getTratamiento);
 
+router.get('/proximos-tratamientos', Authorization ,TratamientoController.getProximosTratamientos);
+
+
 module.exports = router;

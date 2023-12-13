@@ -7,9 +7,10 @@ _this = this;
 exports.getVisitasmed = async function (req, res, next) {
     var page = req.query.page ? req.query.page : 1;
     var limit = req.query.limit ? req.query.limit : 10;
+    var userID = req.userId; 
 
     try {
-        var Visitasmed = await VisitasmedService.getVisitasmed({}, page, limit);
+        var Visitasmed = await VisitasmedService.getVisitasmed({userID}, page, limit);
         return res.status(200).json({ status: 200, data: Visitasmed, message: "Visitas Medicas obtenidas exitosamente" });
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
