@@ -19,7 +19,10 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Esta aplicación necesita acceder a la cámara para tomar fotos.",
-        "NSPhotoLibraryAddUsageDescription": "Esta aplicación necesita acceso a la galería para guardar fotos."
+        "NSPhotoLibraryAddUsageDescription": "Esta aplicación necesita acceso a la galería para guardar fotos.",
+        "NSUserNotificationUsageDescription": "Esta aplicación necesita enviar notificaciones.",
+        "NSCalendarsUsageDescription": "Esta aplicación necesita acceso al calendario.",
+        "NSRemindersUsageDescription": "Esta aplicación necesita acceso a los recordatorios."
       }
     },
     "android": {

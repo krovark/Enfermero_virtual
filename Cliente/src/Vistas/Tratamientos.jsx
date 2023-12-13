@@ -1,90 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Switch, FlatList, Pressable, SafeAreaView } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { IconButton, Card, Button, Title} from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { Card, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import API_URL from '../utils/fetchConfig'
+import API_URL from '../utils/fetchConfig';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 const ListaTratamientos = () => {
   const navigation = useNavigation();
   const [tratamientos, setTratamientos] = useState([]);
-  const [isEnabled, setIsEnabled] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
 
   const fetchTratamientos = async () => {
+    setIsFetching(true);
     try {
-      // Replace with your AsyncStorage logic to get user token and ID
       const token = await AsyncStorage.getItem('userToken');
-      const userId = await AsyncStorage.getItem('userId');
-
-      const apiUrl = `${API_URL}/tratamiento/` + userId;
-
-      console.log(apiUrl);
+      const apiUrl = `${API_URL}/tratamiento/tratamientos`;
 
       const response = await fetch(apiUrl, {
         method: 'GET',
         headers: {
-            'x-access-token': `${token}`,
-            'Content-Type': 'application/json',
+          'x-access-token': token,
+          'Content-Type': 'application/json',
         },
-    });
+      });
 
       if (response.ok) {
         const result = await response.json();
-        setTratamientos(result.data.docs);
-        setIsEnabled(result.data.docs.map((item) => item.isEnabled));
+        setTratamientos(result.data);
       } else {
         console.error('Error al obtener tratamientos:', response.statusText);
+        setTratamientos([]); // Asegúrate de reiniciar el estado si hay un error
       }
     } catch (error) {
       console.error('Error al obtener tratamientos:', error.message);
+    } finally {
+      setIsFetching(false);
     }
   };
 
-  useEffect(() => {
-    fetchTratamientos();
-  }, []);
-
-  const toggleSwitch = async (id, state) => {
-    const updatedEnabled = [...isEnabled];
-    updatedEnabled[id] = state;
-    setIsEnabled(updatedEnabled);
-  };
+  useFocusEffect(
+    useCallback(() => {
+      fetchTratamientos();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={tratamientos}
-        keyExtractor={(item) => item._id.toString()} // Assuming _id is the unique identifier
-        renderItem={({ item, index }) => (
-          <Card contentStyle={styles.card}>
-            <Card.Title title={item.medicamento} subtitle={new Date(item.fechaInicio).toDateString()} />
-            <Card.Content>
-              <Text>Dosis: {item.dosis}</Text>
-              <Text>Recurrencia: {item.recurrencia}</Text>
-              <Text>Duración: {item.duracion} días</Text>
-              {item.hastaCuando && <Text>Hasta: {new Date(item.hastaCuando).toDateString()}</Text>}
-            </Card.Content>
-            <Card.Actions>
-              <Switch
-                value={isEnabled[index]}
-                onValueChange={(value) => toggleSwitch(index, value)}
-              />
-              <Button onPress={() => navigation.navigate('Tratamientos')}>
-                Borrar
-              </Button>
-            </Card.Actions>
-          </Card>
-        )}
-      />
-      <View>
-        <Button onPress={() => navigation.navigate('RegistroTratamiento')}>
-          Agregar Tratamiento
-        </Button>
-      </View>
+      {isFetching ? (
+        <Text style={styles.loadingText}>Cargando tratamientos...</Text>
+      ) : tratamientos.length === 0 ? (
+        <Text style={styles.noDataText}>Aún no hay tratamientos cargados.</Text>
+      ) : (
+        <FlatList
+          data={tratamientos}
+          keyExtractor={(item) => item._id.toString()}
+          renderItem={({ item }) => (
+            <Card style={styles.card}>
+              <Card.Title title={item.medicamento} subtitle={new Date(item.fechaInicio).toDateString()} />
+              <Card.Content>
+                <Text>Horario: {item.horarioToma}</Text>
+                <Text>Dosis: {item.dosis}</Text>
+                <Text>Intervalo: {item.intervalo} horas</Text>
+                <Text>Tomas: {item.tomas}</Text>
+                <Text>Notas: {item.notas}</Text>
+                {item.hastaCuando && <Text>Hasta: {new Date(item.hastaCuando).toLocaleDateString()}</Text>}
+              </Card.Content>
+            </Card>
+          )}
+        />
+      )}
+      <Button onPress={() => navigation.navigate('RegistroTratamiento')}>
+        Agregar Tratamiento
+      </Button>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -102,6 +92,16 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     marginTop: 10,
+  },
+  noDataText: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  loadingText: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 
