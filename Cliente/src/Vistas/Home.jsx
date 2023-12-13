@@ -73,7 +73,8 @@ const HomeScreen = () => {
 
   const renderItem = ({ item }) => {
     if (item.type === 'header') {
-      return <Text style={styles.header}>{item.title}</Text>;
+      // return <Text style={styles.header}>{item.title}</Text>;
+      return <Text style={[styles.header, styles.headerTitle]}>{item.title}</Text>;
     } else if (item.type === 'tratamiento') {
       return (
         <Card style={styles.card}>
@@ -143,6 +144,11 @@ const HomeScreen = () => {
     tratamientoTitle: {
       fontSize: 20,
       fontWeight: 'bold',
+    },
+    headerTitle: {
+      fontSize: 26,
+      fontWeight: 'bold',
+      color: '#333', 
     },
   });
 
