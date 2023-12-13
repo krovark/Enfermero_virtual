@@ -83,6 +83,7 @@ const HomeScreen = () => {
           <Card.Content>
             <Text>Hasta: {item.hastaCuando}</Text>
             <Text>Tomas restantes: {item.tomasRestantes}</Text>
+            <Text>{item.notas}</Text>
           </Card.Content>
         </Card>
       );
@@ -121,7 +122,7 @@ const HomeScreen = () => {
     },
     card: {
       backgroundColor: 'white',
-      padding: 15,
+      padding: 7,
       borderRadius: 10,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
