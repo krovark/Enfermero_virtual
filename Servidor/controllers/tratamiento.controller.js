@@ -168,3 +168,15 @@ exports.getProximosTratamientos = async function (req, res, next) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 };
+
+exports.getTratamientosFinalizados = async function (req, res, next) {
+    var userId = req.userId; // Obtener el ID del usuario a través del token
+
+    try {
+        var tratamientosFinalizados = await TratamientoService.getTratamientosFinalizados(userId);
+        return res.status(200).json({ status: 200, data: tratamientosFinalizados, message: "Historial de tratamientos finalizados obtenido exitosamente" });
+    } catch (e) {
+        console.error("Error al obtener historial de tratamientos finalizados:", e);
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};

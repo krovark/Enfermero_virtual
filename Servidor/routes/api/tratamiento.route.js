@@ -11,5 +11,6 @@ router.get('/tratamientos', Authorization, TratamientoController.getTratamiento)
 
 router.get('/proximos-tratamientos', Authorization ,TratamientoController.getProximosTratamientos);
 
+router.get('/historial', Authorization, TratamientoController.getTratamientosFinalizados);
 
 module.exports = router;

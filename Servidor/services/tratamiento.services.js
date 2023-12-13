@@ -114,3 +114,17 @@ exports.getProximosTratamientos = async (userID) => {
 };
 
 
+exports.getTratamientosFinalizados = async function (userId) {
+    try {
+        const ahora = new Date();
+        const tratamientosFinalizados = await Tratamiento.find({
+            userID: userId,
+            hastaCuando: { $lt: ahora }
+        }).sort({ hastaCuando: -1 });
+
+        return tratamientosFinalizados;
+    } catch (error) {
+        console.error("Error en el servicio al obtener tratamientos finalizados:", error);
+        throw Error('Error while Getting Tratamientos Finalizados');
+    }
+};
